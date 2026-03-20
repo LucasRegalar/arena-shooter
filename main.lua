@@ -1,4 +1,4 @@
-local Player = require("classes.player")
+local Player = require("classes.player.init")
 local Weapon = require("classes.weapon")
 local player
 local weapon

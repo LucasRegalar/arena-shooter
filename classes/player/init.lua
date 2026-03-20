@@ -1,22 +1,13 @@
 local Player = {}
 Player.__index = Player
 
-local SPRITE_SIZE = 20
-local IDLE_ROW_Y = 20
--- skip the last to frames since idle has only 4 / 6
-local IDLE_FRAME_TRIM = 2
-local SPRITE_OFFSET_Y = 1
-local MOVE_SPEED = 300
-local GAMEPAD_DEADZONE = 0.2
-local CROSSHAIR_MAX_DISTANCE = 60
-local CROSSHAIR_RADIUS = 6
-local CROSSHAIR_LINE = 10
+local playerConfig = require('classes.player.config');
 
 function Player:new(x, y)
 	local self = setmetatable({}, Player)
 	self.x = x or 300
 	self.y = y or 300
-	self.speed = MOVE_SPEED
+	self.speed = playerConfig.move_speed
 	self.scale = 3
 
 	self.aimX = self.x
@@ -29,12 +20,12 @@ function Player:new(x, y)
 	self.idleTimer = 0
 
 	local spriteSheetWidth, spriteSheetHeight = self.spriteSheet:getDimensions()
-	for i = 0, (spriteSheetWidth / SPRITE_SIZE) - 1 - IDLE_FRAME_TRIM do
+	for i = 0, (spriteSheetWidth / playerConfig.sprite_size) - 1 - playerConfig.idle_frame_trim do
 		self.idleQuads[i + 1] = love.graphics.newQuad(
-			i * SPRITE_SIZE,
-			IDLE_ROW_Y,
-			SPRITE_SIZE,
-			SPRITE_SIZE,
+			i * playerConfig.sprite_size,
+			playerConfig.idle_row_y,
+			playerConfig.sprite_size,
+			playerConfig.sprite_size,
 			spriteSheetWidth,
 			spriteSheetHeight
 		)
@@ -52,8 +43,8 @@ end
 
 
 function Player:draw()
-	local originX = SPRITE_SIZE / 2 -- center of sprite
-	local originY = SPRITE_SIZE / 2 -- center of sprite
+	local originX = playerConfig.sprite_size / 2 -- center of sprite
+	local originY = playerConfig.sprite_size / 2 -- center of sprite
 	-- todo: change this to only self.x ?
 	-- These are the world coordinates you pass into love.graphics.draw.
 	-- Because you also use an origin, these are not the final top-left corner.
@@ -66,10 +57,10 @@ function Player:draw()
 	-- bounds = sprite rectangle ater scaling
 	local boundsX = drawX - originX * self.scale -- boundsX/boundsY = “where is the sprite’s real top-left after scaling and origin are applied?”
 	local boundsY = drawY - originY * self.scale
-	local boundsSize = SPRITE_SIZE * self.scale
+	local boundsSize = playerConfig.sprite_size * self.scale
 	local boundsCenterX = boundsX + boundsSize / 2
 	local boundsCenterY = boundsY + boundsSize / 2
-	local visualOffsetY = SPRITE_OFFSET_Y * self.scale
+	local visualOffsetY = playerConfig.sprite_offset_y * self.scale
 
 	love.graphics.draw(
 		self.spriteSheet, -- A Texture (Image or Canvas) to texture the Quad with
@@ -99,9 +90,9 @@ function Player:draw()
 end
 
 function Player:drawAim()
-	love.graphics.circle("line", self.aimX, self.aimY, CROSSHAIR_RADIUS)
-	love.graphics.line(self.aimX - CROSSHAIR_LINE, self.aimY, self.aimX + CROSSHAIR_LINE, self.aimY)
-	love.graphics.line(self.aimX, self.aimY - CROSSHAIR_LINE, self.aimX, self.aimY + CROSSHAIR_LINE)
+	love.graphics.circle("line", self.aimX, self.aimY, playerConfig.crosshair_radius)
+	love.graphics.line(self.aimX - playerConfig.crosshair_line, self.aimY, self.aimX + playerConfig.crosshair_line, self.aimY)
+	love.graphics.line(self.aimX, self.aimY - playerConfig.crosshair_line, self.aimX, self.aimY + playerConfig.crosshair_line)
 end
 
 
@@ -128,11 +119,11 @@ function Player:handleMovement(dt)
 		local stickX = gamepad:getGamepadAxis("leftx")
 		local stickY = gamepad:getGamepadAxis("lefty")
 
-		if math.abs(stickX) >= GAMEPAD_DEADZONE then
+		if math.abs(stickX) >= playerConfig.gamepad_deadzone then
 			moveX = moveX + stickX
 		end
 
-		if math.abs(stickY) >= GAMEPAD_DEADZONE then
+		if math.abs(stickY) >= playerConfig.gamepad_deadzone then
 			-- this has to be - y or the controls feel inverted
 			moveY = moveY - stickY
 		end
@@ -162,20 +153,20 @@ function Player:updateAim()
 	local aimY = gamepad:getGamepadAxis("righty")
 	local magnitude = math.sqrt(aimX * aimX + aimY * aimY)
 
-	if magnitude < GAMEPAD_DEADZONE then
+	if magnitude < playerConfig.gamepad_deadzone then
 		self.aimX = self.x
 		self.aimY = self.y
 		return
 	end
 
-	local normalizedMagnitude = (magnitude - GAMEPAD_DEADZONE) / (1 - GAMEPAD_DEADZONE)
+	local normalizedMagnitude = (magnitude - playerConfig.gamepad_deadzone) / (1 - playerConfig.gamepad_deadzone)
 	if normalizedMagnitude > 1 then
 		normalizedMagnitude = 1
 	end
 
 	local directionX = aimX / magnitude
 	local directionY = aimY / magnitude
-	local distance = normalizedMagnitude * CROSSHAIR_MAX_DISTANCE
+	local distance = normalizedMagnitude * playerConfig.crosshair_max_distance
 
 	self.aimX = self.x + directionX * distance
 	-- this has to be - y or the controls feel inverted
