@@ -25,6 +25,7 @@ end
 
 function Player:update(dt)
 	self:handleMovement()
+	self:handleGamepad(dt)
 	self:updateAnimation(dt)
 end
 
@@ -40,19 +41,45 @@ function Player:draw()
 	)
 end
 
+-- legacy to keep testabilty with keyboard
 function Player:handleMovement()
-	if love.keyboard.isDown("\\") then
+	if love.keyboard.isDown("o") then
 		self.x = self.x + self.speed
 	end
-	if love.keyboard.isDown("0") then
+	if love.keyboard.isDown("8") then
 		self.y = self.y - self.speed
 	end
-	if love.keyboard.isDown("p") then
+	if love.keyboard.isDown("i") then
 		self.y = self.y + self.speed
 	end
-	if love.keyboard.isDown("o") then
+	if love.keyboard.isDown("u") then
 		self.x = self.x - self.speed
 	end
+end
+
+-- gamepad controls
+function Player:handleGamepad(dt)
+	local joysticks = love.joystick.getJoysticks()
+	local gamepad = joysticks[1]
+
+	if not gamepad then
+		return
+	end
+
+	local moveX = gamepad:getGamepadAxis("leftx")
+	local moveY = gamepad:getGamepadAxis("lefty")
+	local deadzone = 0.2
+
+	if math.abs(moveX) < deadzone then
+		moveX = 0
+	end
+
+	if math.abs(moveY) < deadzone then
+		moveY = 0
+	end
+
+	self.x = self.x + moveX * self.speed * dt * 100
+	self.y = self.y - moveY * self.speed * dt * 100
 end
 
 function Player:updateAnimation(dt)
