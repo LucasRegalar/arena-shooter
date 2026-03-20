@@ -16,5 +16,6 @@ end
 
 function love.draw()
 	player:draw()
+	player:drawAim()
 	weapon:draw()
 end
