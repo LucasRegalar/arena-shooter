@@ -1,7 +1,7 @@
 local playerConfig = {
 	sprite_size = 20,
 	idle_row_y = 20,
-	-- skip the last to frames since idle has only 4 / 6,
+	-- skip the last to frames since idle has only 4 / 6
 	idle_frame_trim = 2,
 	sprite_offset_y = 1,
 	move_speed = 300,

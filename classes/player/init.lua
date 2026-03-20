@@ -1,7 +1,8 @@
 local Player = {}
 Player.__index = Player
 
-local playerConfig = require('classes.player.config');
+local playerConfig = require('classes.player.config')
+local playerInput = require('classes.player.input')
 
 function Player:new(x, y)
 	local self = setmetatable({}, Player)
@@ -97,43 +98,7 @@ end
 
 
 function Player:handleMovement(dt)
-	local moveX, moveY = 0, 0
-
-	if love.keyboard.isDown("o") then
-		moveX = moveX + 1
-	end
-	if love.keyboard.isDown("8") then
-		moveY = moveY - 1
-	end
-	if love.keyboard.isDown("i") then
-		moveY = moveY + 1
-	end
-	if love.keyboard.isDown("u") then
-		moveX = moveX - 1
-	end
-
-	local joysticks = love.joystick.getJoysticks()
-	local gamepad = joysticks[1]
-
-	if gamepad then
-		local stickX = gamepad:getGamepadAxis("leftx")
-		local stickY = gamepad:getGamepadAxis("lefty")
-
-		if math.abs(stickX) >= playerConfig.gamepad_deadzone then
-			moveX = moveX + stickX
-		end
-
-		if math.abs(stickY) >= playerConfig.gamepad_deadzone then
-			-- this has to be - y or the controls feel inverted
-			moveY = moveY - stickY
-		end
-	end
-
-	local magnitude = math.sqrt(moveX * moveX + moveY * moveY)
-	if magnitude > 1 then
-		moveX = moveX / magnitude
-		moveY = moveY / magnitude
-	end
+	local moveX, moveY = playerInput.getMovementVector(playerConfig);
 
 	self.x = self.x + moveX * self.speed * dt
 	self.y = self.y + moveY * self.speed * dt
