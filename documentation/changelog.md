@@ -2,6 +2,19 @@
 
 ## 2026-03-21
 
+- Added Bump collision library (`lib/bump.lua`) and initialized via STI's bump plugin
+- Collidable tiles are defined in Tiled via the `collidable` custom property on the "walls" layer
+- Map creates and exposes a Bump world (`map.bumpWorld`) with collision rects scaled to game coordinates
+- Player and Game collision wiring is pending a separate refactor
+
+- Integrated STI (Simple Tiled Implementation) library for map rendering
+- Maps are now authored in the Tiled editor and exported as Lua files (`maps/map.lua`)
+- `Map` model loads via STI and derives a passability grid from tile GIDs (0 = passable, non-zero = wall)
+- `MapRenderer` delegates all tile drawing to STI at 2x render scale (16px tiles → 32px on screen)
+- Removed manual texture/sprite rendering (background quad, wall sprites, water sprites)
+- Map elements (Floor/Wall/Water classes) are no longer used — passability is now a boolean grid
+- Added `Map:update(dt)` for STI tile animation support
+- Map config updated: `tile_size` is now 16 (native Tiled tile size), `scale = 2` for render scaling
 - Added `PlayerRenderer` (`classes/ui/playerRenderer.lua`) to own player sprite animation and crosshair drawing
 - Added `WeaponRenderer` (`classes/ui/weaponRenderer.lua`) to restore weapon drawing through the renderer layer
 - Made `Player` and `Weapon` model-focused by removing their direct `love.graphics` draw state and draw methods
