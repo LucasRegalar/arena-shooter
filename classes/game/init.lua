@@ -50,7 +50,7 @@ function Game:update(dt)
 	self.player.x = actualX + hw
 	self.player.y = actualY + hh
 
-	self.player:update(dt)
+	self.player:update(dt, self.viewport)
 	self.weapon:update(dt)
 end
 
