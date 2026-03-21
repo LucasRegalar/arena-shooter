@@ -7,6 +7,7 @@ function love.load()
 	love.window.setMode(0, 0, {fullscreen = true, fullscreentype = "desktop"})
 	-- important for pixel art
 	love.graphics.setDefaultFilter("nearest", "nearest")
+
 	game = Game()
 end
 

@@ -1,11 +1,10 @@
-local Player = {}
-Player.__index = Player
+local Object = require('lib.classic')
+local Player = Object:extend()
 
 local playerConfig = require('classes.player.config')
 local playerInput = require('classes.player.input')
 
 function Player:new(x, y, playerIndex)
-	local self = setmetatable({}, Player)
 	self.x = x or 300
 	self.y = y or 300
 	self.playerIndex = playerIndex
