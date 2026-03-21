@@ -99,9 +99,9 @@ end
 
 
 function PlayerRenderer:drawAim()
-	love.graphics.circle("line", self.player.aimX, self.player.aimY, self.playerConfig.crosshair_radius)
-	love.graphics.line(self.player.aimX - self.playerConfig.crosshair_line, self.player.aimY, self.player.aimX + self.playerConfig.crosshair_line, self.player.aimY)
-	love.graphics.line(self.player.aimX, self.player.aimY - self.playerConfig.crosshair_line, self.player.aimX, self.player.aimY + self.playerConfig.crosshair_line)
+	love.graphics.circle("line", self.player.crossHairX, self.player.crossHairY, self.playerConfig.crosshair_radius)
+	love.graphics.line(self.player.crossHairX - self.playerConfig.crosshair_line, self.player.crossHairY, self.player.crossHairX + self.playerConfig.crosshair_line, self.player.crossHairY)
+	love.graphics.line(self.player.crossHairX, self.player.crossHairY - self.playerConfig.crosshair_line, self.player.crossHairX, self.player.crossHairY + self.playerConfig.crosshair_line)
 end
 
 return PlayerRenderer

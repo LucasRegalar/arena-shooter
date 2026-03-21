@@ -12,8 +12,8 @@ function Player:new(x, y, playerIndex, gameConfig)
 	self.speed = playerConfig.move_speed
 	self.scale = 32/20
 
-	self.aimX = self.x
-	self.aimY = self.y
+	self.crossHairX = self.x
+	self.crossHairY = self.y
 
 	return self
 end
@@ -37,8 +37,8 @@ function Player:updateAim()
 
 	local aimDistance =  aimInputDistance * playerConfig.crosshair_max_distance
 
-	self.aimX = self.x + aimInputX * aimDistance
-	self.aimY = self.y + aimInputY * aimDistance
+	self.crossHairX = self.x + aimInputX * aimDistance
+	self.crossHairY = self.y + aimInputY * aimDistance
 end
 
 
