@@ -15,6 +15,10 @@
 - Map elements (Floor/Wall/Water classes) are no longer used — passability is now a boolean grid
 - Added `Map:update(dt)` for STI tile animation support
 - Map config updated: `tile_size` is now 16 (native Tiled tile size), `scale = 2` for render scaling
+- Added `PlayerRenderer` (`classes/ui/playerRenderer.lua`) to own player sprite animation and crosshair drawing
+- Added `WeaponRenderer` (`classes/ui/weaponRenderer.lua`) to restore weapon drawing through the renderer layer
+- Made `Player` and `Weapon` model-focused by removing their direct `love.graphics` draw state and draw methods
+- `GameRenderer` now orchestrates dedicated player and weapon renderers during world-space drawing
 
 - Added `Water` map element (`classes/map/elements/water.lua`) — impassable water tile
 - Added `WATER = 2` tile type constant to map config

@@ -28,11 +28,11 @@ The `classes/map/elements/` directory contains Floor, Wall, and Water classes th
 
 ### Player
 
-The player has a position (x, y) in map-space pixel coordinates, a movement speed, and sprite animation state. Input is handled separately in `classes/player/input.lua`, configuration in `classes/player/config.lua`.
+The player has a position (x, y) in map-space pixel coordinates, a movement speed, a scale value, and an aim target in world space. Input is handled separately in `classes/player/input.lua`, configuration in `classes/player/config.lua`, and all sprite animation / drawing now lives in `classes/ui/playerRenderer.lua`.
 
 ### Weapon
 
-The weapon is a world-space entity rendered from the weapon sprite sheet. Its module entrypoint lives at `classes/weapon/init.lua`, which keeps it consistent with the other class packages and allows `require("classes.weapon")` to resolve through the directory module pattern.
+The weapon is a world-space entity that stores position and scale only. Its module entrypoint lives at `classes/weapon/init.lua`, while the sprite sheet, quad setup, and draw call live in `classes/ui/weaponRenderer.lua` so rendering stays outside the model layer.
 
 ### Game
 
@@ -44,6 +44,8 @@ The renderer layer lives in `classes/ui/` and handles all drawing, separate from
 
 - **GameRenderer** (`classes/ui/gameRenderer.lua`) — top-level renderer orchestrator. Created in `main.lua` with a reference to the `Game` model. Owns all sub-renderers and the map centering offset. Provides `draw()` for world-space rendering and `drawUI()` for screen-space UI.
 - **MapRenderer** (`classes/ui/mapRenderer.lua`) — handles all map visuals. Fills a dark background color for the floor area, then delegates tile rendering to the STI map instance at 2x scale. Reads the `Map` model but never modifies it.
+- **PlayerRenderer** (`classes/ui/playerRenderer.lua`) — owns the player sprite sheet, animation timer, sprite quads, crosshair rendering, and temporary player debug visuals while reading the `Player` model for world state.
+- **WeaponRenderer** (`classes/ui/weaponRenderer.lua`) — owns the weapon sprite sheet and quad data, and reproduces the previous weapon draw call while reading position and scale from the `Weapon` model.
 
 This pattern separates concerns cleanly: model classes (`Game`, `Map`, `MapElement`) have zero `love.graphics` calls, and renderers read model data to produce visuals. When new entities need rendering (player, weapon), they follow the same pattern — a renderer in `classes/ui/` that reads the model.
 
@@ -55,9 +57,9 @@ The `DebugOverlay` class (`classes/ui/debugOverlay.lua`) is a screen-space HUD e
 
 1. **Configuration** (`conf.lua`): Love2D runs `love.conf` before creating the window. This sets the window title and fullscreen mode so they are correct from the very first frame.
 2. **Initialization** (`love.load`): Pixel filter and window icon are applied. A `Game` instance is created (model), then a `GameRenderer` is created with a reference to the game (view).
-3. **Update** (`love.update`): Delegates to `Game:update(dt)`, which updates the STI map (for tile animations) and the player. No rendering logic runs here.
+3. **Update** (`love.update`): Delegates to `Game:update(dt)` for gameplay state (including STI map tile animations), then `GameRenderer:update(dt)` for presentation-only state such as player animation timing.
 4. **Draw** (`love.draw`): Two-phase rendering, handled entirely by `GameRenderer`:
-   - **World space**: Applies `love.graphics.translate()` with the renderer's map centering offset, then calls `GameRenderer:draw()` (map via MapRenderer, plus player, aim, weapon)
+   - **World space**: Applies `love.graphics.translate()` with the renderer's map centering offset, then calls `GameRenderer:draw()` (map via `MapRenderer`, player via `PlayerRenderer`, weapon via `WeaponRenderer`)
    - **Screen space**: After popping the transform, calls `GameRenderer:drawUI()` (debug overlay and future HUD elements)
 
 ## Why Things Are Implemented This Way
@@ -72,7 +74,7 @@ All game objects share a single `love.graphics.translate()` applied in `love.dra
 The Bump library provides AABB collision detection with a spatial hash grid. STI's bump plugin automatically generates collision rectangles from tiles marked `collidable = true` in Tiled. The collision rects are scaled from native pixel space (16px tiles) to game coordinate space (32px tiles) at initialization. The Bump world is created and exposed by the Map model (`map.bumpWorld`). Wiring player movement through `bumpWorld:move()` is pending a separate refactor.
 
 ### Renderer separation
-Model classes (`Game`, `Map`) contain zero `love.graphics` calls — they are pure data and logic. The `Map` model owns the STI map instance because STI is fundamentally map data that also knows how to render itself. All drawing is handled by renderer classes in `classes/ui/`, with `MapRenderer` calling through to STI's draw method.
+Model classes (`Game`, `Map`, `Player`, `Weapon`) contain gameplay data and logic — they have zero `love.graphics` calls. The `Map` model owns the STI map instance because STI is fundamentally map data that also knows how to render itself. All drawing is handled by renderer classes in `classes/ui/`, with `MapRenderer` calling through to STI's draw method. `PlayerRenderer` and `WeaponRenderer` follow the same pattern for entity visuals so sprite assets, quads, and animation timers stay in the presentation layer.
 
 ### Render scale
 The Tiled map uses 16x16 pixel tiles, but we render at 2x scale so each tile appears as 32x32 on screen. This keeps the visual size consistent with player and weapon sprites. The scale factor is configured in `classes/map/config.lua` and applied by `MapRenderer` when calling STI's draw method.

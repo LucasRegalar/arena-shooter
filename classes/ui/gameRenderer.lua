@@ -4,10 +4,15 @@
 -- Receives the Game model as a read-only data source.
 
 local MapRenderer = require("classes.ui.mapRenderer")
+local playerConfig = require("classes.player.config")
+local PlayerRenderer = require("classes.ui.playerRenderer")
+local WeaponRenderer = require("classes.ui.weaponRenderer")
 
 --- @class GameRenderer : Object
 --- @field game Game Read-only reference to the game model
 --- @field mapRenderer MapRenderer Renderer for the tile-based map
+--- @field playerRenderer PlayerRenderer Renderer for the player entity
+--- @field weaponRenderer WeaponRenderer Renderer for the weapon entity
 --- @field offsetX number Horizontal pixel offset to center the map on screen
 --- @field offsetY number Vertical pixel offset to center the map on screen
 local GameRenderer = Object:extend()
@@ -22,11 +27,20 @@ function GameRenderer:new(game)
 	love.graphics.setDefaultFilter("nearest", "nearest")
 
 	self.mapRenderer = MapRenderer(game.map)
+	self.playerRenderer = PlayerRenderer(game.player, playerConfig)
+	self.weaponRenderer = WeaponRenderer(game.weapon)
 
 	-- Compute centering offset to position the map in the middle of the window
 	local windowWidth, windowHeight = love.graphics.getDimensions()
 	self.offsetX = math.floor((windowWidth - game.map:getPixelWidth()) / 2)
 	self.offsetY = math.floor((windowHeight - game.map:getPixelHeight()) / 2)
+end
+
+--- Updates time-based renderer state.
+-- Keeps presentation-only animation state outside the game model.
+--- @param dt number Delta time since the last frame
+function GameRenderer:update(dt)
+	self.playerRenderer:update(dt)
 end
 
 --- Draws the entire game frame.
@@ -39,11 +53,8 @@ function GameRenderer:draw()
 	love.graphics.translate(self.offsetX, self.offsetY)
 
 	self.mapRenderer:draw()
-
-	-- Temporary: delegate to entity draw methods until they get their own renderers
-	self.game.player:draw()
-	self.game.player:drawAim()
-	self.game.weapon:draw()
+	self.playerRenderer:draw()
+	self.weaponRenderer:draw()
 
 	love.graphics.pop()
 
