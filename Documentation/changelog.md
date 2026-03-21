@@ -2,6 +2,7 @@
 
 ## 2026-03-21
 
+- Moved the weapon module entrypoint from `classes/weapon/weapon.lua` to `classes/weapon/init.lua` so `require("classes.weapon")` resolves correctly again
 - Added shared game configuration module in `classes/game/config.lua`
 - Refactored `GameObject` into a reusable base class for world entities
 - Player and Weapon now inherit from `GameObject` and receive the same shared `gameConfig` reference

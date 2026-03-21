@@ -24,6 +24,10 @@ Map configuration constants (tile size, colors) live in `classes/map/config.lua`
 
 The player has a position (x, y) in map-space pixel coordinates, a movement speed, and sprite animation state. Input is handled separately in `classes/player/input.lua`, configuration in `classes/player/config.lua`.
 
+### Weapon
+
+The weapon is a world-space entity rendered from the weapon sprite sheet. Its module entrypoint lives at `classes/weapon/init.lua`, which keeps it consistent with the other class packages and allows `require("classes.weapon")` to resolve through the directory module pattern.
+
 ### Game
 
 The `Game` class (`classes/game/init.lua`) is the central coordinator. It owns the Map, Player, and Weapon instances and is responsible for initializing, updating, and drawing them. `main.lua` only handles LÖVE window setup and delegates to the Game object.
