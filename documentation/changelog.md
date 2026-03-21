@@ -5,6 +5,7 @@
 - Weapon now stores an aim angle derived from the player crosshair and hand position
 - `WeaponRenderer` now rotates the gun sprite so it points at the active crosshair target
 - Weapon sprites now stay visually upright while aiming left by flipping their render scale vertically
+- `GameRenderer` now draws the weapon behind the player while aiming left to preserve top-down layering
 
 - Added Bump collision library (`lib/bump.lua`) and initialized via STI's bump plugin
 - Collidable tiles are defined in Tiled via the `collidable` custom property on the "walls" layer

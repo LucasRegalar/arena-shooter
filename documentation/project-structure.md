@@ -42,7 +42,7 @@ The `Game` class (`classes/game/init.lua`) is the central model coordinator. It 
 
 The renderer layer lives in `classes/ui/` and handles all drawing, separate from the game model.
 
-- **GameRenderer** (`classes/ui/gameRenderer.lua`) — top-level renderer orchestrator. Created in `main.lua` with a reference to the `Game` model. Owns all sub-renderers and the map centering offset. Provides `draw()` for world-space rendering and `drawUI()` for screen-space UI.
+- **GameRenderer** (`classes/ui/gameRenderer.lua`) — top-level renderer orchestrator. Created in `main.lua` with a reference to the `Game` model. Owns all sub-renderers and the map centering offset. Provides `draw()` for world-space rendering and `drawUI()` for screen-space UI, and decides whether the weapon renders in front of or behind the player based on aim direction.
 - **MapRenderer** (`classes/ui/mapRenderer.lua`) — handles all map visuals. Fills a dark background color for the floor area, then delegates tile rendering to the STI map instance at 2x scale. Reads the `Map` model but never modifies it.
 - **PlayerRenderer** (`classes/ui/playerRenderer.lua`) — owns the player sprite sheet, animation timer, sprite quads, crosshair rendering, and temporary player debug visuals while reading the `Player` model for world state.
 - **WeaponRenderer** (`classes/ui/weaponRenderer.lua`) — owns the weapon sprite sheet and quad data, and reproduces the previous weapon draw call while reading position and scale from the `Weapon` model.
@@ -59,7 +59,7 @@ The `DebugOverlay` class (`classes/ui/debugOverlay.lua`) is a screen-space HUD e
 2. **Initialization** (`love.load`): Pixel filter and window icon are applied. A `Game` instance is created (model), then a `GameRenderer` is created with a reference to the game (view).
 3. **Update** (`love.update`): Delegates to `Game:update(dt)` for gameplay state (including STI map tile animations). During this update, the player refreshes hand and crosshair positions from aim input, then the weapon derives its world position and aim angle from that player state. Afterward, `GameRenderer:update(dt)` advances presentation-only state such as player animation timing.
 4. **Draw** (`love.draw`): Two-phase rendering, handled entirely by `GameRenderer`:
-   - **World space**: Applies `love.graphics.translate()` with the renderer's map centering offset, then calls `GameRenderer:draw()` (map via `MapRenderer`, player via `PlayerRenderer`, weapon via `WeaponRenderer`)
+   - **World space**: Applies `love.graphics.translate()` with the renderer's map centering offset, then calls `GameRenderer:draw()` (map via `MapRenderer`, and player/weapon with dynamic layering so the weapon renders behind the player when aiming left and in front otherwise)
    - **Screen space**: After popping the transform, calls `GameRenderer:drawUI()` (debug overlay and future HUD elements)
 
 ## Why Things Are Implemented This Way
@@ -74,7 +74,7 @@ All game objects share a single `love.graphics.translate()` applied in `love.dra
 The Bump library provides AABB collision detection with a spatial hash grid. STI's bump plugin automatically generates collision rectangles from tiles marked `collidable = true` in Tiled. The collision rects are scaled from native pixel space (16px tiles) to game coordinate space (32px tiles) at initialization. The Bump world is created and exposed by the Map model (`map.bumpWorld`). Wiring player movement through `bumpWorld:move()` is pending a separate refactor.
 
 ### Renderer separation
-Model classes (`Game`, `Map`, `Player`, `Weapon`) contain gameplay data and logic — they have zero `love.graphics` calls. The `Map` model owns the STI map instance because STI is fundamentally map data that also knows how to render itself. All drawing is handled by renderer classes in `classes/ui/`, with `MapRenderer` calling through to STI's draw method. `PlayerRenderer` and `WeaponRenderer` follow the same pattern for entity visuals so sprite assets, quads, and animation timers stay in the presentation layer. In this setup, the weapon model computes the aim angle and left-facing state once from gameplay state, and the renderer simply consumes that data to rotate the sprite consistently while flipping it upright when aiming left.
+Model classes (`Game`, `Map`, `Player`, `Weapon`) contain gameplay data and logic — they have zero `love.graphics` calls. The `Map` model owns the STI map instance because STI is fundamentally map data that also knows how to render itself. All drawing is handled by renderer classes in `classes/ui/`, with `MapRenderer` calling through to STI's draw method. `PlayerRenderer` and `WeaponRenderer` follow the same pattern for entity visuals so sprite assets, quads, and animation timers stay in the presentation layer. In this setup, the weapon model computes the aim angle and left-facing state once from gameplay state, and the renderer layer consumes that data both to rotate the sprite consistently and to switch draw order when the weapon should appear behind the player.
 
 ### Render scale
 The Tiled map uses 16x16 pixel tiles, but we render at 2x scale so each tile appears as 32x32 on screen. This keeps the visual size consistent with player and weapon sprites. The scale factor is configured in `classes/map/config.lua` and applied by `MapRenderer` when calling STI's draw method.
