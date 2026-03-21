@@ -19,4 +19,6 @@ function love.draw()
 	love.graphics.translate(game:getMapOffset())
 	game:draw()
 	love.graphics.pop()
+
+	game:drawUI()
 end
