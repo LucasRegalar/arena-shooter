@@ -24,14 +24,17 @@ Map configuration constants (tile size, colors) live in `classes/map/config.lua`
 
 The player has a position (x, y) in map-space pixel coordinates, a movement speed, and sprite animation state. Input is handled separately in `classes/player/input.lua`, configuration in `classes/player/config.lua`.
 
+### Game
+
+The `Game` class (`classes/game/init.lua`) is the central coordinator. It owns the Map, Player, and Weapon instances and is responsible for initializing, updating, and drawing them. `main.lua` only handles LÖVE window setup and delegates to the Game object.
+
 ## Dataflow
 
-1. **Initialization** (`love.load`): Window is set to 1440x900. Map, Player, and Weapon are created.
-2. **Update** (`love.update`): Player reads input and updates position and animation.
-3. **Draw** (`love.draw`):
-   - A shared `love.graphics.translate()` is applied using the map's centering offset so all objects render in map-space coordinates.
-   - Map draws first: tiled background, then wall tiles.
-   - Player and weapon draw on top.
+1. **Initialization** (`love.load`): Window is set to fullscreen, pixel filter applied. A `Game` instance is created, which in turn creates Map, Player, and Weapon.
+2. **Update** (`love.update`): Delegates to `Game:update(dt)`, which updates the player.
+3. **Draw** (`love.draw`): Delegates to `Game:draw()`, which:
+   - Applies a shared `love.graphics.translate()` using the map's centering offset
+   - Draws map, player, player aim, and weapon in order
 
 ## Why Things Are Implemented This Way
 
@@ -39,7 +42,7 @@ The player has a position (x, y) in map-space pixel coordinates, a movement spee
 Map layouts live in `maps/*.lua` as plain Lua tables rather than being hardcoded in the Map class. This separates level design from rendering logic and makes it easy to add new maps by creating new data files.
 
 ### Shared coordinate translate
-All game objects share a single `love.graphics.translate()` applied in `main.lua`. This means every object uses map-space coordinates (origin at top-left of the map grid). This approach keeps coordinate systems consistent, which is important for future collision detection between the player and wall tiles.
+All game objects share a single `love.graphics.translate()` applied in `Game:draw()`. This means every object uses map-space coordinates (origin at top-left of the map grid). This approach keeps coordinate systems consistent, which is important for future collision detection between the player and wall tiles.
 
 ### Tiled background via Quad
 The background texture uses LÖVE's wrap mode (`"repeat"`) combined with a Quad sized to the full map area. This tiles the texture efficiently in a single draw call rather than drawing individual tiles in a loop.

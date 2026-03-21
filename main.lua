@@ -1,32 +1,22 @@
-Object = require "classic"
+Object = require "lib/classic"
 
-local Player = require("classes.player.init")
-local Weapon = require("classes.weapon")
-local Map = require("classes.map.init")
-local player
-local weapon
-local map
+local Game = require("classes.game.init")
+local game
 
 function love.load()
 	love.window.setMode(0, 0, {fullscreen = true, fullscreentype = "desktop"})
 	-- important for pixel art
 	love.graphics.setDefaultFilter("nearest", "nearest")
-	map = Map:new("maps.default")
-	player = Player:new(300, 300, 1)
-	weapon = Weapon:new(100, 100)
+	game = Game()
 end
 
 function love.update(dt)
-	player:update(dt)
+	game:update(dt)
 end
 
 function love.draw()
-	-- Shared translate so all objects use map-space coordinates
 	love.graphics.push()
-	love.graphics.translate(map:getOffset())
-	map:draw()
-	player:draw()
-	player:drawAim()
-	weapon:draw()
+	love.graphics.translate(game:getMapOffset())
+	game:draw()
 	love.graphics.pop()
 end
