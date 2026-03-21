@@ -2,6 +2,15 @@
 
 ## 2026-03-21
 
+- Integrated STI (Simple Tiled Implementation) library for map rendering
+- Maps are now authored in the Tiled editor and exported as Lua files (`maps/map.lua`)
+- `Map` model loads via STI and derives a passability grid from tile GIDs (0 = passable, non-zero = wall)
+- `MapRenderer` delegates all tile drawing to STI at 2x render scale (16px tiles → 32px on screen)
+- Removed manual texture/sprite rendering (background quad, wall sprites, water sprites)
+- Map elements (Floor/Wall/Water classes) are no longer used — passability is now a boolean grid
+- Added `Map:update(dt)` for STI tile animation support
+- Map config updated: `tile_size` is now 16 (native Tiled tile size), `scale = 2` for render scaling
+
 - Added `Water` map element (`classes/map/elements/water.lua`) — impassable water tile
 - Added `WATER = 2` tile type constant to map config
 - `MapRenderer` now loads and draws `sprites/water.png` for water tiles

@@ -18,7 +18,7 @@ local Game = Object:extend()
 --- Creates a new Game instance.
 -- Initializes the map, player, and weapon with their default values.
 function Game:new()
-	self.map = Map("maps.default")
+	self.map = Map("maps/map.lua")
 	self.player = Player(300, 300, 1)
 	self.weapon = Weapon(100, 100)
 	self.debugOverlay = DebugOverlay()
@@ -27,6 +27,7 @@ end
 --- Updates all game entities.
 -- @param dt number Delta time since the last frame
 function Game:update(dt)
+	self.map:update(dt)
 	self.player:update(dt)
 end
 
