@@ -46,5 +46,41 @@ function input.getMovementVector(config)
 	return moveX, moveY
 end
 
+function input.getAimVector(config)
+
+	local directionX = 0
+	local directionY = 0
+	local distance = 0
+
+	local joysticks = love.joystick.getJoysticks()
+	local gamepad = joysticks[1]
+
+	if not gamepad then
+
+		return directionX, directionY, distance
+	end
+
+	local aimX = gamepad:getGamepadAxis("rightx")
+	local aimY = gamepad:getGamepadAxis("righty")
+	local magnitude = math.sqrt(aimX * aimX + aimY * aimY)
+
+	if magnitude < config.gamepad_deadzone then
+
+		return directionX, directionY, distance
+
+	end
+
+	local normalizedMagnitude = (magnitude - config.gamepad_deadzone) / (1 - config.gamepad_deadzone)
+	if normalizedMagnitude > 1 then
+		normalizedMagnitude = 1
+	end
+
+	directionX = aimX / magnitude
+	directionY = aimY / magnitude
+	distance = normalizedMagnitude * config.crosshair_max_distance
+
+	return directionX, directionY, distance
+end
+
 return input
 
