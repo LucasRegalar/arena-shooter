@@ -93,6 +93,24 @@ function input.getAimVector(config, playerIndex)
 	return directionX, directionY, distance
 end
 
+--- Returns whether the fire button is currently pressed.
+-- Checks left mouse button and gamepad right shoulder.
+--- @param config table Player config with fire_gamepad_button
+--- @param playerIndex number The player index for gamepad lookup
+--- @return boolean True if any fire input is active
+function input.isFirePressed(config, playerIndex)
+	if love.mouse.isDown(1) then
+		return true
+	end
+
+	local gamepad = getGamepad(playerIndex)
+	if gamepad and gamepad:isGamepadDown(config.fire_gamepad_button) then
+		return true
+	end
+
+	return false
+end
+
 --- Returns an aim vector from the mouse cursor position in world space.
 -- Converts the mouse screen position to world coordinates via the viewport,
 -- then computes a direction vector from the player to the cursor.

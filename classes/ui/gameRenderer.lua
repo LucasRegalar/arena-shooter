@@ -7,12 +7,14 @@ local MapRenderer = require("classes.ui.mapRenderer")
 local playerConfig = require("classes.player.config")
 local PlayerRenderer = require("classes.ui.playerRenderer")
 local WeaponRenderer = require("classes.ui.weaponRenderer")
+local ProjectileRenderer = require("classes.ui.projectileRenderer")
 
 --- @class GameRenderer : Object
 --- @field game Game Read-only reference to the game model
 --- @field mapRenderer MapRenderer Renderer for the tile-based map
 --- @field playerRenderer PlayerRenderer Renderer for the player entity
 --- @field weaponRenderer WeaponRenderer Renderer for the weapon entity
+--- @field projectileRenderer ProjectileRenderer Renderer for active projectiles
 local GameRenderer = Object:extend()
 
 --- Creates a new GameRenderer.
@@ -28,6 +30,7 @@ function GameRenderer:new(game)
 	self.mapRenderer = MapRenderer(game.map)
 	self.playerRenderer = PlayerRenderer(game.player, playerConfig)
 	self.weaponRenderer = WeaponRenderer(game.weapon)
+	self.projectileRenderer = ProjectileRenderer(game.projectileManager)
 end
 
 --- Updates time-based renderer state.
@@ -55,6 +58,8 @@ function GameRenderer:draw()
 		self.playerRenderer:draw()
 		self.weaponRenderer:draw()
 	end
+
+	self.projectileRenderer:draw()
 
 	love.graphics.pop()
 

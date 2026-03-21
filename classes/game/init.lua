@@ -2,6 +2,7 @@ local Player = require("classes.player.init")
 local Weapon = require("classes.weapon.init")
 local Map = require("classes.map.init")
 local Viewport = require("classes.viewport")
+local ProjectileManager = require("classes.projectile.manager")
 local DebugOverlay = require("classes.ui.debugOverlay")
 
 local Game = Object:extend()
@@ -16,6 +17,7 @@ function Game:new()
 	self.viewport = Viewport(self.map:getPixelWidth(), self.map:getPixelHeight())
 	self.player = Player(300, 300, 1)
 	self.weapon = Weapon(self.player)
+	self.projectileManager = ProjectileManager(self.map.bumpWorld)
 	self.debugOverlay = DebugOverlay()
 
 	-- Register the player in the Bump world using top-left hitbox coordinates.
@@ -52,6 +54,7 @@ function Game:update(dt)
 
 	self.player:update(dt, self.viewport)
 	self.weapon:update(dt)
+	self.projectileManager:update(dt, self.player)
 end
 
 return Game

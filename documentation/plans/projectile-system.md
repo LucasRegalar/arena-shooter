@@ -84,7 +84,7 @@ Uses the Viewport from Sub-Plan A to convert mouse screen position to world coor
 ### New Files
 
 #### 1. `classes/projectile/config.lua`
-- [ ] Create config module:
+- [x] Create config module:
 	- `speed = 800` — pixels/second
 	- `size = 6` — collision hitbox side length (small square)
 	- `max_range = 600` — max distance in pixels before auto-destroy
@@ -92,19 +92,19 @@ Uses the Viewport from Sub-Plan A to convert mouse screen position to world coor
 	- `fire_gamepad_button = "rightshoulder"` — R1/RB
 
 #### 2. `classes/projectile/init.lua` — Projectile class
-- [ ] Extends `GameObject`
-- [ ] Constructor `Projectile:new(x, y, dirX, dirY, config)`
+- [x] Extends `GameObject`
+- [x] Constructor `Projectile:new(x, y, dirX, dirY, config)`
 	- Stores normalized direction, speed, size, halfSize
 	- `alive = true` flag
 	- `distanceTraveled = 0` — for range checking
-- [ ] `Projectile:getMovementDelta(dt)` — returns dx, dy
-- [ ] `Projectile:destroy()` — sets `alive = false`
+- [x] `Projectile:getMovementDelta(dt)` — returns dx, dy
+- [x] `Projectile:destroy()` — sets `alive = false`
 
 #### 3. `classes/projectile/manager.lua` — ProjectileManager class
-- [ ] Extends `Object` (not a positioned entity)
-- [ ] Constructor `ProjectileManager:new(bumpWorld)`
+- [x] Extends `Object` (not a positioned entity)
+- [x] Constructor `ProjectileManager:new(bumpWorld)`
 	- Stores bumpWorld reference, empty projectile list, fire cooldown timer
-- [ ] `ProjectileManager:update(dt, player)`
+- [x] `ProjectileManager:update(dt, player)`
 	- Decrements fire cooldown
 	- `tryFire(player)` — checks input + cooldown → spawns projectile at `player.x, player.y` with `player.aimDirectionX/Y`
 	- For each projectile:
@@ -114,32 +114,32 @@ Uses the Viewport from Sub-Plan A to convert mouse screen position to world coor
 		- Accumulate `distanceTraveled += sqrt(dx² + dy²)` — destroy if exceeds `max_range`
 		- If any collision with wall → destroy
 	- Remove dead projectiles (reverse iteration + `bumpWorld:remove()`)
-- [ ] `ProjectileManager:getProjectiles()` — returns list for renderer
-- [ ] Collision filter: `other.layer == "walls"` → `"touch"`, else `nil` (ignore player and other projectiles)
+- [x] `ProjectileManager:getProjectiles()` — returns list for renderer
+- [x] Collision filter: `other.layer == "walls"` → `"touch"`, else `nil` (ignore player and other projectiles)
 
 #### 4. `classes/ui/projectileRenderer.lua` — ProjectileRenderer class
-- [ ] Constructor receives `projectileManager`
-- [ ] `draw()` iterates all projectiles, draws a small filled circle at each position
-- [ ] Simple bright color (yellow/white), no sprite for now
+- [x] Constructor receives `projectileManager`
+- [x] `draw()` iterates all projectiles, draws a small filled circle at each position
+- [x] Simple bright color (yellow/white), no sprite for now
 
 ### Modified Files
 
 #### 5. `classes/player/input.lua`
-- [ ] Add `input.isFirePressed(config, playerIndex)`
+- [x] Add `input.isFirePressed(config, playerIndex)`
 	- Checks `love.mouse.isDown(1)` (left mouse button)
 	- Checks gamepad `rightshoulder` if connected
 	- Returns boolean
 
 #### 6. `classes/player/config.lua`
-- [ ] Add `fire_gamepad_button = "rightshoulder"`
+- [x] Add `fire_gamepad_button = "rightshoulder"`
 
 #### 7. `classes/game/init.lua`
-- [ ] Create `ProjectileManager` in `Game:new()` with `self.map.bumpWorld`
-- [ ] Call `self.projectileManager:update(dt, self.player)` after weapon update
+- [x] Create `ProjectileManager` in `Game:new()` with `self.map.bumpWorld`
+- [x] Call `self.projectileManager:update(dt, self.player)` after weapon update
 
 #### 8. `classes/ui/gameRenderer.lua`
-- [ ] Create `ProjectileRenderer` in `GameRenderer:new()`
-- [ ] Call `self.projectileRenderer:draw()` inside world-space block, after weapon
+- [x] Create `ProjectileRenderer` in `GameRenderer:new()`
+- [x] Call `self.projectileRenderer:draw()` inside world-space block, after weapon
 
 ### Documentation
 

@@ -9,7 +9,8 @@ local playerConfig = {
 	crosshair_max_distance = 60,
 	crosshair_radius = 6,
 	crosshair_line = 10,
-	hand_distance = 10
+	hand_distance = 10,
+	fire_gamepad_button = "rightshoulder"
 }
 
 return playerConfig
