@@ -107,9 +107,10 @@ end
 function Player:updateAim()
 	local aimInputX, aimInputY, aimInputDistance = playerInput.getAimVector(playerConfig)
 
-	self.aimX = self.x + aimInputX * aimInputDistance
-	-- this has to be - y or the controls feel inverted
-	self.aimY = self.y - aimInputY * aimInputDistance
+	local aimDistance =  aimInputDistance * playerConfig.crosshair_max_distance
+
+	self.aimX = self.x + aimInputX * aimDistance
+	self.aimY = self.y + aimInputY * aimDistance
 end
 
 
