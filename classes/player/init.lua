@@ -33,8 +33,11 @@ Player.halfWidth = 14
 --- Half-height of the player's collision hitbox in pixels.
 Player.halfHeight = 14
 
-function Player:update(dt)
-	self:updateAim()
+--- Updates player state each frame.
+--- @param dt number Delta time since the last frame
+--- @param viewport Viewport The viewport for mouse aim screen-to-world conversion
+function Player:update(dt, viewport)
+	self:updateAim(viewport)
 end
 
 --- Returns the player's desired movement delta for this frame.
@@ -47,12 +50,23 @@ function Player:getMovementDelta(dt)
 	return moveInputX * self.speed * dt, moveInputY * self.speed * dt
 end
 
-function Player:updateAim()
+--- Updates the player's aim direction, hand position, and crosshair position.
+-- Reads gamepad aim first; if the gamepad has no input, falls back to mouse aim.
+-- This preserves gamepad priority for players using controllers.
+--- @param viewport Viewport The viewport for mouse aim screen-to-world conversion
+function Player:updateAim(viewport)
 	local aimInputX, aimInputY, aimInputDistance = playerInput.getAimVector(playerConfig, self.playerIndex)
+
+	-- Fall back to mouse aim when gamepad has no input
+	if aimInputDistance == 0 then
+		aimInputX, aimInputY, aimInputDistance = playerInput.getMouseAimVector(
+			self.x, self.y, viewport, playerConfig
+		)
+	end
+
 	local handDistance = playerConfig.hand_distance
 	local aimDistance = aimInputDistance * playerConfig.crosshair_max_distance
 
-	-- if aimInputX * aimInputX + aimInputY * aimInputY > 0 then
 	if aimDistance > 0 then
 		self.aimDirectionX = aimInputX
 		self.aimDirectionY = aimInputY

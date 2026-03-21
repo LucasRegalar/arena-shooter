@@ -58,7 +58,7 @@ Uses the Viewport from Sub-Plan A to convert mouse screen position to world coor
 
 ### Modify: `classes/player/input.lua`
 
-- [ ] Add `input.getMouseAimVector(playerX, playerY, viewport)` function
+- [x] Add `input.getMouseAimVector(playerX, playerY, viewport)` function
 	- Gets mouse position via `love.mouse.getPosition()`
 	- Converts to world coords via `viewport:screenToWorld(mouseX, mouseY)`
 	- Computes direction vector from `(playerX, playerY)` to world mouse position
@@ -67,15 +67,15 @@ Uses the Viewport from Sub-Plan A to convert mouse screen position to world coor
 
 ### Modify: `classes/player/init.lua`
 
-- [ ] Update `Player:update(dt)` signature to `Player:update(dt, viewport)`
-- [ ] Update `Player:updateAim()` to `Player:updateAim(viewport)`
+- [x] Update `Player:update(dt)` signature to `Player:update(dt, viewport)`
+- [x] Update `Player:updateAim()` to `Player:updateAim(viewport)`
 	- Call existing `getAimVector()` first (gamepad)
 	- If gamepad has no input (distance == 0), fall back to `getMouseAimVector(self.x, self.y, viewport)`
 	- Gamepad takes priority when active — preserves controller experience
 
 ### Modify: `classes/game/init.lua`
 
-- [ ] Pass viewport to player update: `self.player:update(dt, self.viewport)`
+- [x] Pass viewport to player update: `self.player:update(dt, self.viewport)`
 
 ---
 
