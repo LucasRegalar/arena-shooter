@@ -2,6 +2,8 @@
 
 ## 2026-03-21
 
+- Added `conf.lua` for pre-window configuration (title, fullscreen) — fixes title not appearing everywhere on macOS
+- Moved fullscreen settings from `main.lua` to `conf.lua`
 - Added shared game configuration module in `classes/game/config.lua`
 - Refactored `GameObject` into a reusable base class for world entities
 - Player and Weapon now inherit from `GameObject` and receive the same shared `gameConfig` reference

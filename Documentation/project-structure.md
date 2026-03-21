@@ -30,9 +30,10 @@ The `Game` class (`classes/game/init.lua`) is the central coordinator. It owns t
 
 ## Dataflow
 
-1. **Initialization** (`love.load`): Window is set to fullscreen, pixel filter applied. A `Game` instance is created, which in turn creates Map, Player, and Weapon.
-2. **Update** (`love.update`): Delegates to `Game:update(dt)`, which updates the player.
-3. **Draw** (`love.draw`): Delegates to `Game:draw()`, which:
+1. **Configuration** (`conf.lua`): Love2D runs `love.conf` before creating the window. This sets the window title and fullscreen mode so they are correct from the very first frame.
+2. **Initialization** (`love.load`): Pixel filter and window icon are applied. A `Game` instance is created, which in turn creates Map, Player, and Weapon.
+3. **Update** (`love.update`): Delegates to `Game:update(dt)`, which updates the player.
+4. **Draw** (`love.draw`): Delegates to `Game:draw()`, which:
    - Applies a shared `love.graphics.translate()` using the map's centering offset
    - Draws map, player, player aim, and weapon in order
 
