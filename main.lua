@@ -10,7 +10,7 @@ function love.load()
 	-- important for pixel art
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	map = Map:new("maps.default")
-	player = Player:new(300, 300, 1)
+	player = Player(300, 300, 1)
 	weapon = Weapon:new(100, 100)
 end
 

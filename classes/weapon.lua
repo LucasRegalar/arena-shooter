@@ -1,8 +1,7 @@
-local Weapon = {}
-Weapon.__index = Weapon
+local Object = require('lib.classic')
+local Weapon = Object:extend()
 
 function Weapon:new(x, y)
-	local self = setmetatable({}, Weapon)
 	self.x = x or 100
 	self.y = y or 100
 	self.scale = 2
