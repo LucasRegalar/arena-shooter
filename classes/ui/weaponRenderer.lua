@@ -9,9 +9,11 @@ local WeaponRenderer = Object:extend()
 function WeaponRenderer:new(weapon)
 	self.weapon = weapon
 	self.spriteSheet = love.graphics.newImage("sprites/weapons/1 (1).png")
+	self.spriteSizeX = 32
+	self.spriteSizeY = 11
 
 	local sheetW, sheetH = self.spriteSheet:getDimensions()
-	self.quad = love.graphics.newQuad(64, 85, 32, 11, sheetW, sheetH)
+	self.quad = love.graphics.newQuad(64, 85, self.spriteSizeX, self.spriteSizeY, sheetW, sheetH)
 
 	return self
 end
@@ -20,7 +22,17 @@ end
 -- Uses the same position, rotation, and scale behavior as the previous
 -- Weapon:draw implementation.
 function WeaponRenderer:draw()
-	love.graphics.draw(self.spriteSheet, self.quad, self.weapon.x, self.weapon.y, 0, self.weapon.scale, self.weapon.scale)
+	love.graphics.draw(
+		self.spriteSheet,
+		self.quad,
+		self.weapon.x,
+		self.weapon.y,
+		0,
+		self.weapon.scale,
+		self.weapon.scale,
+		self.spriteSizeX / 2,
+		self.spriteSizeY / 2
+	)
 end
 
 return WeaponRenderer
