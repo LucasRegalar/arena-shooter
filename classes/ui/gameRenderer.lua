@@ -1,6 +1,6 @@
 --- Game renderer.
--- Orchestrates all rendering for the game. Owns individual renderers (starting
--- with MapRenderer) and computes view-level layout such as the map centering offset.
+-- Orchestrates all rendering for the game. Owns individual renderers and delegates
+-- the world-to-screen transform to the Viewport owned by the Game model.
 -- Receives the Game model as a read-only data source.
 
 local MapRenderer = require("classes.ui.mapRenderer")
@@ -13,12 +13,11 @@ local WeaponRenderer = require("classes.ui.weaponRenderer")
 --- @field mapRenderer MapRenderer Renderer for the tile-based map
 --- @field playerRenderer PlayerRenderer Renderer for the player entity
 --- @field weaponRenderer WeaponRenderer Renderer for the weapon entity
---- @field offsetX number Horizontal pixel offset to center the map on screen
---- @field offsetY number Vertical pixel offset to center the map on screen
 local GameRenderer = Object:extend()
 
 --- Creates a new GameRenderer.
--- Initializes all sub-renderers and computes the map centering offset.
+-- Initializes all sub-renderers. The world-to-screen transform is handled by
+-- the Viewport instance on the Game model.
 --- @param game Game The game model to render (read-only data source)
 function GameRenderer:new(game)
 	self.game = game
@@ -29,11 +28,6 @@ function GameRenderer:new(game)
 	self.mapRenderer = MapRenderer(game.map)
 	self.playerRenderer = PlayerRenderer(game.player, playerConfig)
 	self.weaponRenderer = WeaponRenderer(game.weapon)
-
-	-- Compute centering offset to position the map in the middle of the window
-	local windowWidth, windowHeight = love.graphics.getDimensions()
-	self.offsetX = math.floor((windowWidth - game.map:getPixelWidth()) / 2)
-	self.offsetY = math.floor((windowHeight - game.map:getPixelHeight()) / 2)
 end
 
 --- Updates time-based renderer state.
@@ -44,13 +38,13 @@ function GameRenderer:update(dt)
 end
 
 --- Draws the entire game frame.
--- First draws world-space entities (map, player, weapon) inside a coordinate
--- transform that centers the map on screen, then draws screen-space UI elements
+-- First draws world-space entities (map, player, weapon) inside the viewport
+-- transform (stretch-to-fit + centering), then draws screen-space UI elements
 -- (debug overlay, HUD) outside the transform.
 function GameRenderer:draw()
-	-- World space: apply map centering offset
+	-- World space: apply viewport stretch-to-fit transform
 	love.graphics.push()
-	love.graphics.translate(self.offsetX, self.offsetY)
+	self.game.viewport:apply()
 
 	self.mapRenderer:draw()
 	self.playerRenderer:draw()

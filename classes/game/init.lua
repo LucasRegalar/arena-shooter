@@ -1,6 +1,7 @@
 local Player = require("classes.player.init")
 local Weapon = require("classes.weapon.init")
 local Map = require("classes.map.init")
+local Viewport = require("classes.viewport")
 local DebugOverlay = require("classes.ui.debugOverlay")
 
 local Game = Object:extend()
@@ -12,6 +13,7 @@ end
 
 function Game:new()
 	self.map = Map("maps/map.lua")
+	self.viewport = Viewport(self.map:getPixelWidth(), self.map:getPixelHeight())
 	self.player = Player(300, 300, 1)
 	self.weapon = Weapon(self.player)
 	self.debugOverlay = DebugOverlay()
