@@ -1,3 +1,5 @@
+Object = require "classic"
+
 local Player = require("classes.player.init")
 local Weapon = require("classes.weapon")
 local Map = require("classes.map.init")

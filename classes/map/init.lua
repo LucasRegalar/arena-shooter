@@ -13,41 +13,35 @@ local config = require("classes.map.config")
 --- @field offset_y number Vertical pixel offset to center the map on screen
 --- @field background love.Image Tiled background texture
 --- @field backgroundQuad love.Quad Quad spanning the full map area for tiled background drawing
-local Map = {}
-Map.__index = Map
+local Map = Object:extend()
 
 --- Creates a new Map instance.
 -- Loads grid data from the given module path, sets up the tiled background,
 -- and computes the centering offset based on the current window size.
 -- @param mapDataPath string Module path to a Lua file returning a 2D grid table (e.g. "maps.default")
--- @return Map A new Map instance
 function Map:new(mapDataPath)
-	local instance = setmetatable({}, Map)
-
 	-- Load tile grid from external data file
-	instance.grid = require(mapDataPath)
-	instance.rows = #instance.grid
-	instance.cols = #instance.grid[1]
+	self.grid = require(mapDataPath)
+	self.rows = #self.grid
+	self.cols = #self.grid[1]
 
 	-- Load background texture with repeat wrapping for tiling
-	instance.background = love.graphics.newImage("sprites/background.png")
-	instance.background:setWrap("repeat", "repeat")
+	self.background = love.graphics.newImage("sprites/background.png")
+	self.background:setWrap("repeat", "repeat")
 
 	-- Create a quad that spans the full map pixel area so the texture tiles across it
-	local mapPixelWidth = instance.cols * config.tile_size
-	local mapPixelHeight = instance.rows * config.tile_size
-	instance.backgroundQuad = love.graphics.newQuad(
+	local mapPixelWidth = self.cols * config.tile_size
+	local mapPixelHeight = self.rows * config.tile_size
+	self.backgroundQuad = love.graphics.newQuad(
 		0, 0,
 		mapPixelWidth, mapPixelHeight,
-		instance.background:getWidth(), instance.background:getHeight()
+		self.background:getWidth(), self.background:getHeight()
 	)
 
 	-- Compute centering offset to position the map in the middle of the window
 	local windowWidth, windowHeight = love.graphics.getDimensions()
-	instance.offset_x = math.floor((windowWidth - mapPixelWidth) / 2)
-	instance.offset_y = math.floor((windowHeight - mapPixelHeight) / 2)
-
-	return instance
+	self.offset_x = math.floor((windowWidth - mapPixelWidth) / 2)
+	self.offset_y = math.floor((windowHeight - mapPixelHeight) / 2)
 end
 
 --- Draws the map: tiled background first, then wall tiles on top.

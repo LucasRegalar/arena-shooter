@@ -10,3 +10,4 @@
 - Map auto-centers on screen with pixel-perfect alignment
 - All game objects now render in shared map-space coordinates via `love.graphics.translate`
 - Window size set to 1440x900
+- Migrated Map class from manual metatable OOP to classic library (`Object:extend()`)

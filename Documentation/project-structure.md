@@ -1,5 +1,9 @@
 # Project Structure
 
+## Libraries
+
+The game uses the external "classic" (https://github.com/rxi/classic) library for easier object handling in LUA.
+
 ## How the Game Works
 
 A top-down 2D arena shooter built with LÖVE 2D. The player moves around a tile-based map and aims with a crosshair. The map defines the playable area with floor and wall tiles.
