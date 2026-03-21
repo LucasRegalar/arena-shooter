@@ -12,10 +12,6 @@ function PlayerRenderer:new(player, playerConfig)
 	self.originY = self.playerConfig.sprite_size / 2 -- center of sprite
 
 	self.spriteSheet = love.graphics.newImage('sprites/NuclearLeak_CharacterAnim_1.2/character_20x20_pink.png')
-	self.idleQuads = {}
-	self.idleFrame = 1
-	self.idleFrameTime = 0.15
-	self.idleTimer = 0
 
 	local spriteSheetWidth, spriteSheetHeight = self.spriteSheet:getDimensions()
 
