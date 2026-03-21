@@ -1,4 +1,6 @@
 local PlayerRenderer = Object:extend()
+local anim8 = require('lib.anim8')
+
 
 function PlayerRenderer:new(player, playerConfig)
 	self.player = player
@@ -14,19 +16,19 @@ function PlayerRenderer:new(player, playerConfig)
 	self.idleTimer = 0
 
 	local spriteSheetWidth, spriteSheetHeight = self.spriteSheet:getDimensions()
-	for i = 0, (spriteSheetWidth / playerConfig.sprite_size) - 1 - playerConfig.idle_frame_trim do
-		self.idleQuads[i + 1] = love.graphics.newQuad(
-			i * playerConfig.sprite_size,
-			playerConfig.idle_row_y,
-			playerConfig.sprite_size,
-			playerConfig.sprite_size,
-			spriteSheetWidth,
-			spriteSheetHeight
-		)
-	end
+
+	local grid = anim8.newGrid(
+		self.playerConfig.sprite_size,
+		self.playerConfig.sprite_size,
+		spriteSheetWidth,
+		spriteSheetHeight
+	)
+
+	self.animation = anim8.newAnimation(grid('1-4', 2), 0.1)
 
 	return self
 end
+
 
 function PlayerRenderer:draw()
 	local renderData = self:getRenderData()
@@ -34,6 +36,7 @@ function PlayerRenderer:draw()
 	self:drawAim()
 	self:drawDebug(renderData)
 end
+
 
 function PlayerRenderer:getRenderData()
 	local drawX = self.player.x
@@ -60,27 +63,23 @@ end
 
 
 function PlayerRenderer:update(dt)
-	self.idleTimer = self.idleTimer + dt
-	if self.idleTimer >= self.idleFrameTime then
-		self.idleTimer = self.idleTimer - self.idleFrameTime
-		self.idleFrame = self.idleFrame % #self.idleQuads + 1
-	end
+	self.animation:update(dt)
 end
 
 
 function PlayerRenderer:drawPlayer(renderData)
-	love.graphics.draw(
-		self.spriteSheet, -- A Texture (Image or Canvas) to texture the Quad with
-		self.idleQuads[self.idleFrame], -- the quad to draw
-		renderData.drawX, -- y to draw the object
-		renderData.drawY - renderData.visualOffsetY, -- x to draw the object
-		0, -- orientation = rotation?
-		self.player.scale, -- scale factor x
-		self.player.scale, -- scale factor y
+	self.animation:draw(
+		self.spriteSheet,
+		renderData.drawX,
+		renderData.drawY - renderData.visualOffsetY,
+		0,
+		self.player.scale,
+		self.player.scale,
 		self.originX,
 		self.originY
 	)
 end
+
 
 function PlayerRenderer:drawDebug(renderData)
 	love.graphics.setColor(0, 1, 0) -- rgp green
@@ -98,9 +97,7 @@ function PlayerRenderer:drawDebug(renderData)
 	love.graphics.setColor(1, 1, 1) -- white
 end
 
---- Draws the player's world-space aim indicator.
--- Uses the player model's current aim target so the crosshair stays aligned
--- with gameplay input.
+
 function PlayerRenderer:drawAim()
 	love.graphics.circle("line", self.player.aimX, self.player.aimY, self.playerConfig.crosshair_radius)
 	love.graphics.line(self.player.aimX - self.playerConfig.crosshair_line, self.player.aimY, self.player.aimX + self.playerConfig.crosshair_line, self.player.aimY)
