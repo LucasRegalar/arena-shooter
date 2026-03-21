@@ -2,6 +2,20 @@
 
 ## 2026-03-21
 
+- Added `Water` map element (`classes/map/elements/water.lua`) — impassable water tile
+- Added `WATER = 2` tile type constant to map config
+- `MapRenderer` now loads and draws `sprites/water.png` for water tiles
+- Updated default map with a pond in the upper-right area
+
+- Introduced renderer system to separate model code from drawing code
+- Added `MapRenderer` (`classes/ui/mapRenderer.lua`) — handles all map textures, quads, and draw calls
+- Added `GameRenderer` (`classes/ui/gameRenderer.lua`) — orchestrates all renderers and owns the map centering offset
+- Made `Map` a pure data model — removed all `love.graphics` calls, textures, draw method, and offset computation
+- Made `Game` model-only — removed `draw()`, `drawUI()`, and `getMapOffset()`; rendering now handled by `GameRenderer`
+- Stripped rendering from `Wall` and `MapElement` — removed sprite references and draw methods
+- Added `Map:getPixelWidth()` and `Map:getPixelHeight()` helper methods
+- `main.lua` now creates and delegates to `GameRenderer` for all drawing
+
 - Introduced `MapElement` base class (`classes/map/elements/mapElement.lua`) extending `GameObject` with grid position and passability
 - Added `Floor` element (`classes/map/elements/floor.lua`) — passable, rendering handled by background Quad
 - Added `Wall` element (`classes/map/elements/wall.lua`) — impassable, draws its own sprite
