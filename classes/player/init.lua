@@ -11,6 +11,7 @@ function Player:new(x, y, playerIndex, gameConfig)
 	self.playerIndex = playerIndex
 	self.speed = playerConfig.move_speed
 	self.scale = 32/20
+	self.isFacingLeft = false
 
 	self.crossHairX = self.x
 	self.crossHairY = self.y
@@ -55,6 +56,7 @@ function Player:updateAim()
 	if aimDistance > 0 then
 		self.aimDirectionX = aimInputX
 		self.aimDirectionY = aimInputY
+		self.isFacingLeft = aimInputX < 0
 	end
 
 	self.handX = self.x - self.aimDirectionY * handDistance

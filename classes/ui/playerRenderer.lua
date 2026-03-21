@@ -68,12 +68,14 @@ end
 
 
 function PlayerRenderer:drawPlayer(renderData)
+	local scaleX = self.player.isFacingLeft and -self.player.scale or self.player.scale
+
 	self.animation:draw(
 		self.spriteSheet,
 		renderData.drawX,
 		renderData.drawY - renderData.visualOffsetY,
 		0,
-		self.player.scale,
+		scaleX,
 		self.player.scale,
 		self.originX,
 		self.originY
