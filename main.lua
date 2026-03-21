@@ -1,6 +1,7 @@
 local Player = require("classes.player.init")
 local Weapon = require("classes.weapon")
 local Map = require("classes.map.init")
+local gameConfig = require("classes.game.config")
 local player
 local weapon
 local map
@@ -10,8 +11,8 @@ function love.load()
 	-- important for pixel art
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	map = Map:new("maps.default")
-	player = Player(300, 300, 1)
-	weapon = Weapon:new(100, 100)
+	player = Player(300, 300, 1, gameConfig)
+	weapon = Weapon(100, 100, gameConfig)
 end
 
 function love.update(dt)

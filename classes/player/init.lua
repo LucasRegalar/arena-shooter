@@ -1,12 +1,32 @@
-local Object = require('lib.classic')
-local Player = Object:extend()
+local GameObject = require('classes.gameObject')
 
 local playerConfig = require('classes.player.config')
 local playerInput = require('classes.player.input')
 
-function Player:new(x, y, playerIndex)
-	self.x = x or 300
-	self.y = y or 300
+--- Player entity.
+-- Handles player-specific movement, aim, animation, and rendering while
+-- inheriting shared world state from `GameObject`.
+--- @class Player : GameObject
+--- @field playerIndex number Input slot for this player
+--- @field speed number Movement speed in pixels per second
+--- @field scale number Sprite scale multiplier
+--- @field aimX number Aim target x position in world space
+--- @field aimY number Aim target y position in world space
+--- @field spriteSheet love.Image Player sprite sheet image
+--- @field idleQuads love.Quad[] Idle animation frames
+--- @field idleFrame number Current idle animation frame index
+--- @field idleFrameTime number Duration of each idle animation frame
+--- @field idleTimer number Accumulated time toward next frame
+local Player = GameObject:extend()
+
+--- Creates a new player instance.
+--- @param x number|nil Initial world x position
+--- @param y number|nil Initial world y position
+--- @param playerIndex number Input slot for this player
+--- @param gameConfig GameConfig Shared game configuration table
+function Player:new(x, y, playerIndex, gameConfig)
+	Player.super.new(self, x or 300, y or 300, gameConfig)
+
 	self.playerIndex = playerIndex
 	self.speed = playerConfig.move_speed
 	self.scale = 32/20
