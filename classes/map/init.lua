@@ -1,21 +1,23 @@
 --- Map class.
 -- Manages a tile-based map as a pure data model, powered by STI (Simple Tiled Implementation).
--- Loads a Tiled-exported Lua map via STI and derives a passability grid from tile data.
--- Non-zero tile GIDs in the "walls" layer are treated as impassable.
+-- Loads a Tiled-exported Lua map via STI, initializes a Bump collision world from
+-- tiles marked as collidable in Tiled, and derives a passability grid from tile data.
 
 local sti = require("lib.sti")
+local bump = require("lib.bump")
 local config = require("classes.map.config")
 
 --- @class Map
 --- @field tiledMap table STI map instance (handles tileset loading and rendering)
+--- @field bumpWorld table Bump collision world for AABB collision detection
 --- @field passability table 2D boolean grid (true = passable, false = impassable)
 --- @field rows number Number of tile rows in the grid
 --- @field cols number Number of tile columns in the grid
 local Map = Object:extend()
 
 --- Creates a new Map instance.
--- Loads a Tiled map via STI and builds a passability grid by scanning the "walls" layer.
--- Tiles with a non-zero GID are treated as impassable; empty cells (GID 0) are passable.
+-- Loads a Tiled map via STI, builds a passability grid by scanning the "walls" layer,
+-- and creates a Bump collision world with scaled collision rects for each impassable tile.
 --- @param mapPath string File path to a Tiled-exported Lua map (e.g. "maps/map.lua")
 function Map:new(mapPath)
 	self.tiledMap = sti(mapPath)
@@ -32,7 +34,6 @@ function Map:new(mapPath)
 		end
 	end
 
-	-- Find the "walls" layer and scan its tile data
 	local wallsLayer = self.tiledMap.layers["walls"]
 	if wallsLayer then
 		if wallsLayer.chunks then
@@ -58,6 +59,21 @@ function Map:new(mapPath)
 						self.passability[y][x] = false
 					end
 				end
+			end
+		end
+	end
+
+	-- Create Bump collision world from the passability grid.
+	-- We build this ourselves rather than using STI's bump_init because
+	-- bump_init doesn't support chunked maps (layer.data is nil for chunks).
+	-- Cell size matches the scaled tile size for optimal spatial hashing.
+	local tilePixels = config.tile_size * config.scale
+	self.bumpWorld = bump.newWorld(tilePixels)
+	for y = 1, self.rows do
+		for x = 1, self.cols do
+			if not self.passability[y][x] then
+				local obj = { x = x, y = y, layer = "walls" }
+				self.bumpWorld:add(obj, (x - 1) * tilePixels, (y - 1) * tilePixels, tilePixels, tilePixels)
 			end
 		end
 	end

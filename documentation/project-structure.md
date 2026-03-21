@@ -4,6 +4,7 @@
 
 - **classic** (https://github.com/rxi/classic) — OOP library for easier class handling in Lua.
 - **STI** (https://github.com/karai17/Simple-Tiled-Implementation) — Tiled map loader and renderer for LÖVE. Lives in `lib/sti/`. Handles tileset image loading, SpriteBatch rendering, and tile animations.
+- **bump** (https://github.com/kikito/bump.lua) — Lightweight AABB collision detection library. Lives in `lib/bump.lua`. Provides a spatial hash world with `move()` for collision resolution and built-in response types (slide, touch, cross, bounce).
 
 ## How the Game Works
 
@@ -13,9 +14,11 @@ A top-down 2D arena shooter built with LÖVE 2D. The player moves around a tile-
 
 ### Map
 
-The `Map` class (`classes/map/init.lua`) loads a Tiled-exported Lua map via STI and derives a passability grid from the tile data. It owns the STI map instance (`self.tiledMap`), which handles tileset loading and rendering internally.
+The `Map` class (`classes/map/init.lua`) loads a Tiled-exported Lua map via STI with the Bump plugin and owns both the STI map instance (`self.tiledMap`) and the Bump collision world (`self.bumpWorld`).
 
-Passability is determined by scanning the "walls" layer: tiles with GID 0 (empty) are passable, non-zero GIDs are impassable. The passability grid (`self.passability`) is a 2D boolean table built once at load time. `isPassable(x, y)` queries this grid.
+Collision geometry is generated automatically by STI's bump plugin from tiles/layers marked `collidable = true` in Tiled. Because STI creates collision rects in native pixel space (16px) while game entities work in scaled coordinates (32px), the Map scales all collision rects by the render scale factor after initialization.
+
+A passability grid (`self.passability`) is also maintained as a 2D boolean table for grid-based queries via `isPassable(x, y)`.
 
 Map configuration constants (native tile size, render scale, grid dimensions) live in `classes/map/config.lua`. The map uses 16x16 pixel tiles rendered at 2x scale (appearing as 32x32 on screen).
 
@@ -63,7 +66,10 @@ The `DebugOverlay` class (`classes/ui/debugOverlay.lua`) is a screen-space HUD e
 Maps are authored in the Tiled editor (https://www.mapeditor.org/) and exported as Lua files into `maps/`. STI loads these exports directly, handling tileset images, tile rendering, and animations. This separates level design tooling from game code and provides a visual editor for map creation.
 
 ### Shared coordinate translate
-All game objects share a single `love.graphics.translate()` applied in `love.draw()`. This means every object uses map-space coordinates (origin at top-left of the map grid). The centering offset is computed by `GameRenderer` from the map's pixel dimensions. This approach keeps coordinate systems consistent, which is important for future collision detection between the player and wall tiles.
+All game objects share a single `love.graphics.translate()` applied in `love.draw()`. This means every object uses map-space coordinates (origin at top-left of the map grid). The centering offset is computed by `GameRenderer` from the map's pixel dimensions. This approach keeps coordinate systems consistent across collision detection and rendering.
+
+### Collision via Bump
+The Bump library provides AABB collision detection with a spatial hash grid. STI's bump plugin automatically generates collision rectangles from tiles marked `collidable = true` in Tiled. The collision rects are scaled from native pixel space (16px tiles) to game coordinate space (32px tiles) at initialization. The Bump world is created and exposed by the Map model (`map.bumpWorld`). Wiring player movement through `bumpWorld:move()` is pending a separate refactor.
 
 ### Renderer separation
 Model classes (`Game`, `Map`) contain zero `love.graphics` calls — they are pure data and logic. The `Map` model owns the STI map instance because STI is fundamentally map data that also knows how to render itself. All drawing is handled by renderer classes in `classes/ui/`, with `MapRenderer` calling through to STI's draw method.

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.0" orientation="orthogonal" renderorder="right-down" width="50" height="32" tilewidth="16" tileheight="16" infinite="1" nextlayerid="38" nextobjectid="4">
+<map version="1.10" tiledversion="1.12.0" orientation="orthogonal" renderorder="right-down" width="45" height="28" tilewidth="16" tileheight="16" infinite="1" nextlayerid="38" nextobjectid="4">
  <editorsettings>
   <export target="../../../Developer/Privat/arena-shooter/maps/map.lua" format="lua"/>
  </editorsettings>
  <tileset firstgid="1" name="walls_floor" tilewidth="16" tileheight="16" tilecount="493" columns="17">
   <image source="walls_floor.png" width="272" height="464"/>
  </tileset>
- <layer id="35" name="walls" width="45" height="30">
+ <layer id="35" name="walls" width="45" height="28" offsetx="-66.2093" offsety="-6.38162">
+  <properties>
+   <property name="collidable" type="bool" value="true"/>
+  </properties>
   <data encoding="csv">
    <chunk x="0" y="0" width="16" height="16">
 23,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,

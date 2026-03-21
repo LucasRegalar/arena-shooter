@@ -2,6 +2,11 @@
 
 ## 2026-03-21
 
+- Added Bump collision library (`lib/bump.lua`) and initialized via STI's bump plugin
+- Collidable tiles are defined in Tiled via the `collidable` custom property on the "walls" layer
+- Map creates and exposes a Bump world (`map.bumpWorld`) with collision rects scaled to game coordinates
+- Player and Game collision wiring is pending a separate refactor
+
 - Integrated STI (Simple Tiled Implementation) library for map rendering
 - Maps are now authored in the Tiled editor and exported as Lua files (`maps/map.lua`)
 - `Map` model loads via STI and derives a passability grid from tile GIDs (0 = passable, non-zero = wall)
