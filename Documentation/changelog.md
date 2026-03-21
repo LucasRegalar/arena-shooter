@@ -11,6 +11,7 @@
 - Added `Game:drawUI()` for screen-space UI rendering outside the map coordinate transform
 - Added `conf.lua` for pre-window configuration (title, fullscreen) — fixes title not appearing everywhere on macOS
 - Moved fullscreen settings from `main.lua` to `conf.lua`
+- Moved the weapon module entrypoint from `classes/weapon/weapon.lua` to `classes/weapon/init.lua` so `require("classes.weapon")` resolves correctly again
 - Added shared game configuration module in `classes/game/config.lua`
 - Refactored `GameObject` into a reusable base class for world entities
 - Player and Weapon now inherit from `GameObject` and receive the same shared `gameConfig` reference
