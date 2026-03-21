@@ -25,15 +25,15 @@ function input.getMovementVector(config)
 
 	if gamepad then
 		local stickX = gamepad:getGamepadAxis("leftx")
-		local stickY = gamepad:getGamepadAxis("lefty")
+		-- this has to be - y or the controls feel inverted
+		local stickY = - gamepad:getGamepadAxis("lefty")
 
 		if math.abs(stickX) >= config.gamepad_deadzone then
 			moveX = moveX + stickX
 		end
 
 		if math.abs(stickY) >= config.gamepad_deadzone then
-			-- this has to be - y or the controls feel inverted
-			moveY = moveY - stickY
+			moveY = moveY + stickY
 		end
 	end
 
@@ -53,6 +53,7 @@ function input.getAimVector(config)
 	local distance = 0
 
 	local joysticks = love.joystick.getJoysticks()
+	-- todo: move this into a property?
 	local gamepad = joysticks[1]
 
 	if not gamepad then
@@ -61,7 +62,8 @@ function input.getAimVector(config)
 	end
 
 	local aimX = gamepad:getGamepadAxis("rightx")
-	local aimY = gamepad:getGamepadAxis("righty")
+	-- this has to be - y or the controls feel inverted
+	local aimY = - gamepad:getGamepadAxis("righty")
 	local magnitude = math.sqrt(aimX * aimX + aimY * aimY)
 
 	if magnitude < config.gamepad_deadzone then
@@ -70,14 +72,18 @@ function input.getAimVector(config)
 
 	end
 
+	-- This makes aiming distance begin smoothly after the deadzone instead of jumping.
 	local normalizedMagnitude = (magnitude - config.gamepad_deadzone) / (1 - config.gamepad_deadzone)
+	-- safty clamp to have max 1 magnitude. Just in case
 	if normalizedMagnitude > 1 then
 		normalizedMagnitude = 1
 	end
 
+	-- convert raw stick vector into pure direction vector
 	directionX = aimX / magnitude
+	-- convert raw stick vector into pure direction vector
 	directionY = aimY / magnitude
-	distance = normalizedMagnitude * config.crosshair_max_distance
+	distance = normalizedMagnitude
 
 	return directionX, directionY, distance
 end
