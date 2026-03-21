@@ -1,14 +1,15 @@
 --- Map class.
 -- Manages a tile-based grid world as a pure data model.
 -- Loads map data from an external Lua file and builds a grid of MapElement
--- objects (Floor/Wall) for game logic such as passability checks.
+-- objects (Floor/Wall/Water) for game logic such as passability checks.
 
 local config = require("classes.map.config")
 local Floor = require("classes.map.elements.floor")
 local Wall = require("classes.map.elements.wall")
+local Water = require("classes.map.elements.water")
 
 --- @class Map
---- @field grid table 2D array of raw tile type integers (0 = floor, 1 = wall)
+--- @field grid table 2D array of raw tile type integers (0 = floor, 1 = wall, 2 = water)
 --- @field elements table 2D array of MapElement instances (Floor or Wall)
 --- @field rows number Number of tile rows in the grid
 --- @field cols number Number of tile columns in the grid
@@ -29,8 +30,11 @@ function Map:new(mapDataPath)
 	for row = 1, self.rows do
 		self.elements[row] = {}
 		for col = 1, self.cols do
-			if self.grid[row][col] == config.WALL then
+			local tile = self.grid[row][col]
+			if tile == config.WALL then
 				self.elements[row][col] = Wall(col, row)
+			elseif tile == config.WATER then
+				self.elements[row][col] = Water(col, row)
 			else
 				self.elements[row][col] = Floor(col, row)
 			end

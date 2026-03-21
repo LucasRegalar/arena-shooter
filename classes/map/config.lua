@@ -15,6 +15,9 @@ local mapConfig = {
 
 	--- Tile type constant for impassable wall.
 	WALL = 1,
+
+	--- Tile type constant for impassable water.
+	WATER = 2,
 }
 
 return mapConfig

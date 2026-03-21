@@ -1,6 +1,6 @@
 --- Map renderer.
 -- Handles all visual representation of the tile-based map.
--- Loads textures, creates quads, and draws the tiled background and wall sprites.
+-- Loads textures, creates quads, and draws the tiled background, wall sprites, and water sprites.
 -- Reads map data (grid integers) but never modifies it.
 
 local mapConfig = require("classes.map.config")
@@ -11,6 +11,8 @@ local mapConfig = require("classes.map.config")
 --- @field backgroundQuad love.Quad Quad spanning full map area for tiled background drawing
 --- @field wallSprite love.Image Wall tile sprite
 --- @field wallPositions table Pre-computed {x, y} pairs for all wall tiles
+--- @field waterSprite love.Image Water tile sprite
+--- @field waterPositions table Pre-computed {x, y} pairs for all water tiles
 local MapRenderer = Object:extend()
 
 --- Creates a new MapRenderer.
@@ -33,23 +35,28 @@ function MapRenderer:new(map)
 		self.background:getWidth(), self.background:getHeight()
 	)
 
-	-- Load wall tile sprite
+	-- Load tile sprites
 	self.wallSprite = love.graphics.newImage("sprites/wall.png")
+	self.waterSprite = love.graphics.newImage("sprites/water.png")
 
-	-- Pre-compute wall pixel positions from the raw grid data
+	-- Pre-compute tile pixel positions from the raw grid data
 	self.wallPositions = {}
+	self.waterPositions = {}
 	for row = 1, map.rows do
 		for col = 1, map.cols do
-			if map.grid[row][col] == mapConfig.WALL then
-				local x = (col - 1) * mapConfig.tile_size
-				local y = (row - 1) * mapConfig.tile_size
+			local tile = map.grid[row][col]
+			local x = (col - 1) * mapConfig.tile_size
+			local y = (row - 1) * mapConfig.tile_size
+			if tile == mapConfig.WALL then
 				self.wallPositions[#self.wallPositions + 1] = { x = x, y = y }
+			elseif tile == mapConfig.WATER then
+				self.waterPositions[#self.waterPositions + 1] = { x = x, y = y }
 			end
 		end
 	end
 end
 
---- Draws the map: tiled background first, then wall sprites on top.
+--- Draws the map: tiled background first, then tile sprites on top.
 -- Assumes a shared love.graphics.translate() has already been applied by the caller.
 function MapRenderer:draw()
 	-- Draw tiled background across the full map area
@@ -59,6 +66,12 @@ function MapRenderer:draw()
 	for i = 1, #self.wallPositions do
 		local pos = self.wallPositions[i]
 		love.graphics.draw(self.wallSprite, pos.x, pos.y)
+	end
+
+	-- Draw all water sprites at their pre-computed positions
+	for i = 1, #self.waterPositions do
+		local pos = self.waterPositions[i]
+		love.graphics.draw(self.waterSprite, pos.x, pos.y)
 	end
 end
 
