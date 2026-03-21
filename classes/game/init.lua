@@ -4,7 +4,7 @@
 -- Rendering is handled separately by GameRenderer.
 
 local Player = require("classes.player.init")
-local Weapon = require("classes.weapon")
+local Weapon = require("classes.weapon.init")
 local Map = require("classes.map.init")
 local DebugOverlay = require("classes.ui.debugOverlay")
 
