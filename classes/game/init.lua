@@ -8,12 +8,13 @@ local Game = Object:extend()
 function Game:new()
 	self.map = Map("maps.default")
 	self.player = Player(300, 300, 1)
-	self.weapon = Weapon(100, 100)
+	self.weapon = Weapon(self.player)
 	self.debugOverlay = DebugOverlay()
 end
 
 function Game:update(dt)
 	self.player:update(dt)
+	self.weapon:update(dt)
 end
 
 return Game
