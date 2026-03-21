@@ -3,7 +3,15 @@
 
 local input = {}
 
-function input.getMovementVector(config)
+local function getGamepad(playerIndex)
+
+	local joysticks = love.joystick.getJoysticks()
+	local gamepad = joysticks[playerIndex]
+
+	return gamepad;
+end
+
+function input.getMovementVector(config, playerIndex)
 
 	local moveX, moveY = 0, 0
 
@@ -20,8 +28,7 @@ function input.getMovementVector(config)
 		moveX = moveX - 1
 	end
 
-	local joysticks = love.joystick.getJoysticks()
-	local gamepad = joysticks[1]
+	local gamepad = getGamepad(playerIndex)
 
 	if gamepad then
 		local stickX = gamepad:getGamepadAxis("leftx")
@@ -46,15 +53,13 @@ function input.getMovementVector(config)
 	return moveX, moveY
 end
 
-function input.getAimVector(config)
+function input.getAimVector(config, playerIndex)
 
 	local directionX = 0
 	local directionY = 0
 	local distance = 0
 
-	local joysticks = love.joystick.getJoysticks()
-	-- todo: move this into a property?
-	local gamepad = joysticks[1]
+	local gamepad = getGamepad(playerIndex)
 
 	if not gamepad then
 
