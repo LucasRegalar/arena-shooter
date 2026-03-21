@@ -1,4 +1,3 @@
-local Object = require('lib.classic')
 
 --- Base class for world objects that need shared game configuration.
 -- This stays intentionally small for now and will grow as we add more

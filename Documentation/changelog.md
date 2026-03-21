@@ -2,6 +2,13 @@
 
 ## 2026-03-21
 
+- Introduced `MapElement` base class (`classes/map/elements/mapElement.lua`) extending `GameObject` with grid position and passability
+- Added `Floor` element (`classes/map/elements/floor.lua`) — passable, rendering handled by background Quad
+- Added `Wall` element (`classes/map/elements/wall.lua`) — impassable, draws its own sprite
+- Refactored `Map` to build a 2D grid of `MapElement` instances from raw tile data
+- Added `Map:getElementAt()` and `Map:isPassable()` query methods
+- Added debug overlay HUD (`classes/ui/debugOverlay.lua`) displaying player coordinates in the bottom-left corner with a semi-transparent black background, gated behind `gameConfig.debug`
+- Added `Game:drawUI()` for screen-space UI rendering outside the map coordinate transform
 - Added `conf.lua` for pre-window configuration (title, fullscreen) — fixes title not appearing everywhere on macOS
 - Moved fullscreen settings from `main.lua` to `conf.lua`
 - Added shared game configuration module in `classes/game/config.lua`
