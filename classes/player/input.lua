@@ -7,16 +7,16 @@ function input.getMovementVector(config)
 
 	local moveX, moveY = 0, 0
 
-	if love.keyboard.isDown("o") then
+	if love.keyboard.isDown("o") or love.keyboard.isDown("d")  then
 		moveX = moveX + 1
 	end
-	if love.keyboard.isDown("8") then
+	if love.keyboard.isDown("8") or love.keyboard.isDown("w") then
 		moveY = moveY - 1
 	end
-	if love.keyboard.isDown("i") then
+	if love.keyboard.isDown("i") or love.keyboard.isDown("s") then
 		moveY = moveY + 1
 	end
-	if love.keyboard.isDown("u") then
+	if love.keyboard.isDown("u") or love.keyboard.isDown("a") then
 		moveX = moveX - 1
 	end
 
