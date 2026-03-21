@@ -22,7 +22,7 @@ function PlayerRenderer:new(player, playerConfig)
 		spriteSheetHeight
 	)
 
-	self.animation = anim8.newAnimation(grid('1-4', 2), 0.1)
+	self.animation = anim8.newAnimation(grid('1-4', 2), 0.25)
 
 	return self
 end
