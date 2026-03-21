@@ -6,7 +6,7 @@ function Weapon:new(player, gameConfig)
 	Weapon.super.new(self, player.x, player.y, gameConfig)
 
 	self.player = player
-	self.scale = 2
+	self.scale = 1.5
 
 	return self
 end
