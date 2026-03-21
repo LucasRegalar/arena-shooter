@@ -15,9 +15,6 @@ local mapConfig = {
 
 	--- Tile type constant for impassable wall.
 	WALL = 1,
-
-	--- RGBA color used to draw wall tiles (placeholder gray).
-	wall_color = {0.4, 0.4, 0.4, 1},
 }
 
 return mapConfig

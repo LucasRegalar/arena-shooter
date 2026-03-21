@@ -13,6 +13,7 @@ local config = require("classes.map.config")
 --- @field offset_y number Vertical pixel offset to center the map on screen
 --- @field background love.Image Tiled background texture
 --- @field backgroundQuad love.Quad Quad spanning the full map area for tiled background drawing
+--- @field wallSprite love.Image Wall tile sprite
 local Map = Object:extend()
 
 --- Creates a new Map instance.
@@ -38,6 +39,9 @@ function Map:new(mapDataPath)
 		self.background:getWidth(), self.background:getHeight()
 	)
 
+	-- Load wall tile sprite
+	self.wallSprite = love.graphics.newImage("sprites/wall.png")
+
 	-- Compute centering offset to position the map in the middle of the window
 	local windowWidth, windowHeight = love.graphics.getDimensions()
 	self.offset_x = math.floor((windowWidth - mapPixelWidth) / 2)
@@ -50,22 +54,18 @@ function Map:draw()
 	-- Draw tiled background across the full map area
 	love.graphics.draw(self.background, self.backgroundQuad, 0, 0)
 
-	-- Draw wall tiles as gray rectangles
-	love.graphics.setColor(config.wall_color)
+	-- Draw wall tiles using wall sprite
 	for row = 1, self.rows do
 		for col = 1, self.cols do
 			if self.grid[row][col] == config.WALL then
-				love.graphics.rectangle(
-					"fill",
+				love.graphics.draw(
+					self.wallSprite,
 					(col - 1) * config.tile_size,
-					(row - 1) * config.tile_size,
-					config.tile_size,
-					config.tile_size
+					(row - 1) * config.tile_size
 				)
 			end
 		end
 	end
-	love.graphics.setColor(1, 1, 1, 1)
 end
 
 --- Returns the tile type at the given grid coordinates.

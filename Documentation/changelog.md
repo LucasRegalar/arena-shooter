@@ -12,3 +12,4 @@
 - Window size set to 1440x900
 - Migrated Map class from manual metatable OOP to classic library (`Object:extend()`)
 - Extracted game logic from `main.lua` into `Game` class (`classes/game.lua`)
+- Replaced gray placeholder rectangles with wall sprite (`sprites/wall.png`) for wall tiles
