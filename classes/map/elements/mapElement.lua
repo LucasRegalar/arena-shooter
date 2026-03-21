@@ -1,7 +1,7 @@
 --- MapElement base class.
 -- Base type for all objects that occupy a cell on the tile grid.
 -- Extends GameObject to inherit world position and gameConfig.
--- Subclasses (Floor, Wall) define specific passability and rendering behavior.
+-- Subclasses (Floor, Wall) define specific passability behavior.
 
 local GameObject = require("classes.gameObject")
 local mapConfig = require("classes.map.config")
@@ -32,10 +32,6 @@ end
 --- @return boolean
 function MapElement:isPassable()
 	return self.passable
-end
-
---- Draws this element. No-op by default; subclasses override as needed.
-function MapElement:draw()
 end
 
 --- Updates this element. No-op by default; subclasses override as needed.
