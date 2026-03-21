@@ -1,5 +1,5 @@
 local gameConfig = {
-	debug = true,
+	debug = false,
 }
 
 return gameConfig

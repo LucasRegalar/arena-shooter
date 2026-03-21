@@ -1,6 +1,8 @@
 local PlayerRenderer = Object:extend()
 local anim8 = require('lib.anim8')
 
+local gameConfig = require('classes.game.config')
+
 
 function PlayerRenderer:new(player, playerConfig)
 	self.player = player
@@ -34,7 +36,9 @@ function PlayerRenderer:draw()
 	local renderData = self:getRenderData()
 	self:drawPlayer(renderData)
 	self:drawAim()
-	self:drawDebug(renderData)
+	if gameConfig.debug then
+		self:drawDebug(renderData)
+	end
 end
 
 
