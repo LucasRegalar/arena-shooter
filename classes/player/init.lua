@@ -49,15 +49,16 @@ end
 function Player:updateAim()
 	local aimInputX, aimInputY, aimInputDistance = playerInput.getAimVector(playerConfig, self.playerIndex)
 	local handDistance = playerConfig.hand_distance
-	local aimDistance =  aimInputDistance * playerConfig.crosshair_max_distance
+	local aimDistance = aimInputDistance * playerConfig.crosshair_max_distance
 
 	-- if aimInputX * aimInputX + aimInputY * aimInputY > 0 then
 	if aimDistance > 0 then
 		self.aimDirectionX = aimInputX
 		self.aimDirectionY = aimInputY
-		self.handX = self.x - aimInputY * handDistance
-		self.handY = self.y + aimInputX * handDistance
 	end
+
+	self.handX = self.x - self.aimDirectionX * handDistance
+	self.handY = self.y + self.aimDirectionY * handDistance
 
 	self.crossHairX = self.x + aimInputX * aimDistance
 	self.crossHairY = self.y + aimInputY * aimDistance
