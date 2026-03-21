@@ -18,6 +18,9 @@ local GameRenderer = Object:extend()
 function GameRenderer:new(game)
 	self.game = game
 
+	-- Use nearest-neighbor filtering for crisp pixel art
+	love.graphics.setDefaultFilter("nearest", "nearest")
+
 	self.mapRenderer = MapRenderer(game.map)
 
 	-- Compute centering offset to position the map in the middle of the window

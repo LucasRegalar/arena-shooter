@@ -6,9 +6,6 @@ local game
 local gameRenderer
 
 function love.load()
-	-- important for pixel art
-	love.graphics.setDefaultFilter("nearest", "nearest")
-
 	game = Game()
 	gameRenderer = GameRenderer(game)
 end
