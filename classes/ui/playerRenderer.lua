@@ -1,6 +1,8 @@
 local PlayerRenderer = Object:extend()
 local anim8 = require('lib.anim8')
 
+local gameConfig = require('classes.game.config')
+
 
 function PlayerRenderer:new(player, playerConfig)
 	self.player = player
@@ -10,10 +12,6 @@ function PlayerRenderer:new(player, playerConfig)
 	self.originY = self.playerConfig.sprite_size / 2 -- center of sprite
 
 	self.spriteSheet = love.graphics.newImage('sprites/NuclearLeak_CharacterAnim_1.2/character_20x20_pink.png')
-	self.idleQuads = {}
-	self.idleFrame = 1
-	self.idleFrameTime = 0.15
-	self.idleTimer = 0
 
 	local spriteSheetWidth, spriteSheetHeight = self.spriteSheet:getDimensions()
 
@@ -34,7 +32,9 @@ function PlayerRenderer:draw()
 	local renderData = self:getRenderData()
 	self:drawPlayer(renderData)
 	self:drawAim()
-	self:drawDebug(renderData)
+	if gameConfig.debug then
+		self:drawDebug(renderData)
+	end
 end
 
 
@@ -68,12 +68,14 @@ end
 
 
 function PlayerRenderer:drawPlayer(renderData)
+	local scaleX = self.player.isFacingLeft and -self.player.scale or self.player.scale
+
 	self.animation:draw(
 		self.spriteSheet,
 		renderData.drawX,
 		renderData.drawY - renderData.visualOffsetY,
 		0,
-		self.player.scale,
+		scaleX,
 		self.player.scale,
 		self.originX,
 		self.originY

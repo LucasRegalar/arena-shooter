@@ -22,14 +22,16 @@ end
 -- Uses the same position, rotation, and scale behavior as the previous
 -- Weapon:draw implementation.
 function WeaponRenderer:draw()
+	local scaleY = self.weapon.isFacingLeft and -self.weapon.scale or self.weapon.scale
+
 	love.graphics.draw(
 		self.spriteSheet,
 		self.quad,
 		self.weapon.x,
 		self.weapon.y,
-		0,
+		self.weapon.angle,
 		self.weapon.scale,
-		self.weapon.scale,
+		scaleY,
 		self.spriteSizeX / 2,
 		self.spriteSizeY / 2
 	)

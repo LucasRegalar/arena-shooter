@@ -47,8 +47,14 @@ function GameRenderer:draw()
 	self.game.viewport:apply()
 
 	self.mapRenderer:draw()
-	self.playerRenderer:draw()
-	self.weaponRenderer:draw()
+
+	if self.game.weapon.isFacingLeft then
+		self.weaponRenderer:draw()
+		self.playerRenderer:draw()
+	else
+		self.playerRenderer:draw()
+		self.weaponRenderer:draw()
+	end
 
 	love.graphics.pop()
 
