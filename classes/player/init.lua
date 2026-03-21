@@ -9,7 +9,7 @@ function Player:new(x, y)
 	self.x = x or 300
 	self.y = y or 300
 	self.speed = playerConfig.move_speed
-	self.scale = 3
+	self.scale = 32/20
 
 	self.aimX = self.x
 	self.aimY = self.y
@@ -98,44 +98,18 @@ end
 
 
 function Player:handleMovement(dt)
-	local moveX, moveY = playerInput.getMovementVector(playerConfig);
+	local moveInputX, moveInputY = playerInput.getMovementVector(playerConfig);
 
-	self.x = self.x + moveX * self.speed * dt
-	self.y = self.y + moveY * self.speed * dt
+	self.x = self.x + moveInputX * self.speed * dt
+	self.y = self.y + moveInputY * self.speed * dt
 end
 
 function Player:updateAim()
-	local joysticks = love.joystick.getJoysticks()
-	local gamepad = joysticks[1]
+	local aimInputX, aimInputY, aimInputDistance = playerInput.getAimVector(playerConfig)
 
-	if not gamepad then
-		self.aimX = self.x
-		self.aimY = self.y
-		return
-	end
-
-	local aimX = gamepad:getGamepadAxis("rightx")
-	local aimY = gamepad:getGamepadAxis("righty")
-	local magnitude = math.sqrt(aimX * aimX + aimY * aimY)
-
-	if magnitude < playerConfig.gamepad_deadzone then
-		self.aimX = self.x
-		self.aimY = self.y
-		return
-	end
-
-	local normalizedMagnitude = (magnitude - playerConfig.gamepad_deadzone) / (1 - playerConfig.gamepad_deadzone)
-	if normalizedMagnitude > 1 then
-		normalizedMagnitude = 1
-	end
-
-	local directionX = aimX / magnitude
-	local directionY = aimY / magnitude
-	local distance = normalizedMagnitude * playerConfig.crosshair_max_distance
-
-	self.aimX = self.x + directionX * distance
+	self.aimX = self.x + aimInputX * aimInputDistance
 	-- this has to be - y or the controls feel inverted
-	self.aimY = self.y - directionY * distance
+	self.aimY = self.y - aimInputY * aimInputDistance
 end
 
 
