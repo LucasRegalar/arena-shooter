@@ -98,6 +98,9 @@ function PlayerRenderer:drawDebug(renderData)
 	love.graphics.setColor(1, 1, 1) -- white
 end
 
+--- Draws the player's world-space aim indicator.
+-- Uses the player model's current aim target so the crosshair stays aligned
+-- with gameplay input.
 function PlayerRenderer:drawAim()
 	love.graphics.circle("line", self.player.aimX, self.player.aimY, self.playerConfig.crosshair_radius)
 	love.graphics.line(self.player.aimX - self.playerConfig.crosshair_line, self.player.aimY, self.player.aimX + self.playerConfig.crosshair_line, self.player.aimY)

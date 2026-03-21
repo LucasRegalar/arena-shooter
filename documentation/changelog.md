@@ -2,6 +2,11 @@
 
 ## 2026-03-21
 
+- Added `PlayerRenderer` (`classes/ui/playerRenderer.lua`) to own player sprite animation and crosshair drawing
+- Added `WeaponRenderer` (`classes/ui/weaponRenderer.lua`) to restore weapon drawing through the renderer layer
+- Made `Player` and `Weapon` model-focused by removing their direct `love.graphics` draw state and draw methods
+- `GameRenderer` now orchestrates dedicated player and weapon renderers during world-space drawing
+
 - Added `Water` map element (`classes/map/elements/water.lua`) — impassable water tile
 - Added `WATER = 2` tile type constant to map config
 - `MapRenderer` now loads and draws `sprites/water.png` for water tiles
