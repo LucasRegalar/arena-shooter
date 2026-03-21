@@ -57,8 +57,8 @@ function Player:updateAim()
 		self.aimDirectionY = aimInputY
 	end
 
-	self.handX = self.x - self.aimDirectionX * handDistance
-	self.handY = self.y + self.aimDirectionY * handDistance
+	self.handX = self.x - self.aimDirectionY * handDistance
+	self.handY = self.y + math.abs(self.aimDirectionX) * handDistance
 
 	self.crossHairX = self.x + aimInputX * aimDistance
 	self.crossHairY = self.y + aimInputY * aimDistance
