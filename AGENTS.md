@@ -17,18 +17,18 @@
 
 ## Documentation Guidelines
 - Document all functions, properties and types that you write with appropriate comments in code.
-- All written documentation for this project lives in the `Documentation` folder.
-- Document all changes in the `Documentation/changelog.md` file.
+- All written documentation for this project lives in the `documentation` folder.
+- Document all changes in the `documentation/changelog.md` file.
 	- Only document code changes, not changes in documentation
 	- Group changes by date.
-- Update the document `Documentation/project-structure.md` with information on:
+- Update the document `documentation/project-structure.md` with information on:
 	- how the game works
 	- what the data model looks like
 	- what the dataflow looks like
 	- why things are implemented the way they are
 
 ## Plan File Guidelines
-- Store plan files in `Documentation/plans`.
+- Store plan files in `documentation/plans`.
 - Start with a short description of what will be implemented.
 - Use Markdown checkboxes with nested lists for detailed steps.
 - Do not include example code samples in plan files.
