@@ -1,8 +1,6 @@
-# Love Love Love
-
 ![Hero](assets/images/hero.jpg)
 
-A top-down arena shooter built with [Love2D](https://love2d.org/). Players navigate a tile-based map, aim with gamepad or mouse, and fire projectiles that collide with walls. The game features pixel-art sprites, Tiled-based map editing, and smooth wall-sliding movement.
+Love Love Love is a top-down arena shooter built with [Love2D](https://love2d.org/). Players navigate a tile-based map, aim with gamepad or mouse, and fire projectiles that collide with walls. The game features pixel-art sprites, Tiled-based map editing, and smooth wall-sliding movement.
 
 ## Roadmap
 
