@@ -1,9 +1,2 @@
-### VS Code ###
-.vscode/launch.json
-
-
 ### macOS ###
-# General
 .DS_Store
-.AppleDouble
-.LSOverride
