@@ -29,6 +29,8 @@ function Weapon:update()
 	self.angle = math.atan2(aimDeltaY, aimDeltaX)
 end
 
+-- todo: use anim8
+-- todo: extract into render file
 function Weapon:draw()
 	local scaleY = self.isFacingLeft and -self.scale or self.scale
 

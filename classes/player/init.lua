@@ -79,6 +79,7 @@ function Player:updateAim()
 	self.crossHairY = self.y + aimInputY * aimDistance
 end
 
+-- todo: extract into render file
 function Player:draw()
 	local renderData = self:getRenderData()
 	self:drawPlayer(renderData)
