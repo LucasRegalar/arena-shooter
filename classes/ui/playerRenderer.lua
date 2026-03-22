@@ -11,7 +11,7 @@ function PlayerRenderer:new(player, playerConfig)
 	self.originX = self.playerConfig.sprite_size / 2 -- center of sprite
 	self.originY = self.playerConfig.sprite_size / 2 -- center of sprite
 
-	self.spriteSheet = love.graphics.newImage('sprites/NuclearLeak_CharacterAnim_1.2/character_20x20_pink.png')
+	self.spriteSheet = love.graphics.newImage('assets/sprites/characters/pink.png')
 
 	local spriteSheetWidth, spriteSheetHeight = self.spriteSheet:getDimensions()
 

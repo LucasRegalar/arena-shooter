@@ -8,7 +8,7 @@ local WeaponRenderer = Object:extend()
 -- the renderer split, so the visual output stays unchanged.
 function WeaponRenderer:new(weapon)
 	self.weapon = weapon
-	self.spriteSheet = love.graphics.newImage("sprites/weapons/1 (1).png")
+	self.spriteSheet = love.graphics.newImage("assets/sprites/weapons/weapons.png")
 	self.spriteSizeX = 32
 	self.spriteSizeY = 11
 
