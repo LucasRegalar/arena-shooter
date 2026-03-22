@@ -7,13 +7,14 @@ local playerInput = require('classes.player.input')
 
 local Player = Object:extend()
 
--- todo: integrate gameConfig
-function Player:new(x, y, playerIndex, gameConfig)
+-- todo: refactor so player receives opts or config instead of
+-- requirering the gameConfig
+function Player:new(x, y, playerIndex)
 	self.x = x
 	self.y = y
 	self.playerIndex = playerIndex
 	self.speed = playerConfig.move_speed
-	self.scale = 32/20
+	self.scale = 3
 	self.isFacingLeft = false
 
 	self.crossHairX = self.x

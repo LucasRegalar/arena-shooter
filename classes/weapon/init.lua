@@ -1,14 +1,20 @@
-local GameObject = require('classes.gameObject')
+local Object = require('lib.classic')
+local Weapon = Object:extend()
 
-local Weapon = GameObject:extend()
-
-function Weapon:new(player, gameConfig)
-	Weapon.super.new(self, player.x, player.y, gameConfig)
-
+function Weapon:new(player)
+	self.x = player.x
+	self.y = player.y
 	self.player = player
-	self.scale = 1.5
+	self.scale = 2.5
 	self.angle = 0
 	self.isFacingLeft = false
+
+	self.spriteSheet = love.graphics.newImage("sprites/weapons/1 (1).png")
+	self.spriteSizeX = 32
+	self.spriteSizeY = 11
+
+	local sheetW, sheetH = self.spriteSheet:getDimensions()
+	self.quad = love.graphics.newQuad(64, 85, self.spriteSizeX, self.spriteSizeY, sheetW, sheetH)
 
 	return self
 end
@@ -21,6 +27,22 @@ function Weapon:update()
 	local aimDeltaY = self.player.crossHairY - self.y
 	self.isFacingLeft = aimDeltaX < 0
 	self.angle = math.atan2(aimDeltaY, aimDeltaX)
+end
+
+function Weapon:draw()
+	local scaleY = self.isFacingLeft and -self.scale or self.scale
+
+	love.graphics.draw(
+		self.spriteSheet,
+		self.quad,
+		self.x,
+		self.y,
+		self.angle,
+		self.scale,
+		scaleY,
+		self.spriteSizeX / 2,
+		self.spriteSizeY / 2
+	)
 end
 
 return Weapon
