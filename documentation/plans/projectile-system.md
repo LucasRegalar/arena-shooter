@@ -19,7 +19,7 @@ We'll introduce a `Viewport` class that computes a single stretch-to-fit transfo
 
 **Important distinction:** `mapConfig.scale` (currently `2`) defines the **game coordinate system** — it's the ratio between native tile pixels (16px) and game-world units (32px). The Viewport's scale is a separate concern: how game-world units map to screen pixels.
 
-### New File: `classes/viewport.lua`
+### New File: `classes/ui/viewport.lua`
 
 - [x] Create `Viewport` class (extends `Object`)
 - [x] Constructor `Viewport:new(gameWidth, gameHeight)`
@@ -35,7 +35,7 @@ We'll introduce a `Viewport` class that computes a single stretch-to-fit transfo
 	- `worldY = (screenY - self.offsetY) / self.scale`
 	- Used by mouse aiming input
 
-### Modify: `classes/game/init.lua`
+### Modify: `classes/datamodel/game/init.lua`
 
 - [x] Create Viewport after Map: `self.viewport = Viewport(self.map:getPixelWidth(), self.map:getPixelHeight())`
 - [x] Viewport is accessible to other systems via `game.viewport`
@@ -56,7 +56,7 @@ We'll introduce a `Viewport` class that computes a single stretch-to-fit transfo
 
 Uses the Viewport from Sub-Plan A to convert mouse screen position to world coordinates.
 
-### Modify: `classes/player/input.lua`
+### Modify: `classes/datamodel/player/input.lua`
 
 - [x] Add `input.getMouseAimVector(playerX, playerY, viewport)` function
 	- Gets mouse position via `love.mouse.getPosition()`
@@ -65,7 +65,7 @@ Uses the Viewport from Sub-Plan A to convert mouse screen position to world coor
 	- Computes distance (clamped to `crosshair_max_distance` for crosshair display)
 	- Returns `directionX, directionY, distance` (same signature as `getAimVector`)
 
-### Modify: `classes/player/init.lua`
+### Modify: `classes/datamodel/player/init.lua`
 
 - [x] Update `Player:update(dt)` signature to `Player:update(dt, viewport)`
 - [x] Update `Player:updateAim()` to `Player:updateAim(viewport)`
@@ -73,7 +73,7 @@ Uses the Viewport from Sub-Plan A to convert mouse screen position to world coor
 	- If gamepad has no input (distance == 0), fall back to `getMouseAimVector(self.x, self.y, viewport)`
 	- Gamepad takes priority when active — preserves controller experience
 
-### Modify: `classes/game/init.lua`
+### Modify: `classes/datamodel/game/init.lua`
 
 - [x] Pass viewport to player update: `self.player:update(dt, self.viewport)`
 
@@ -83,7 +83,7 @@ Uses the Viewport from Sub-Plan A to convert mouse screen position to world coor
 
 ### New Files
 
-#### 1. `classes/projectile/config.lua`
+#### 1. `classes/datamodel/projectile/config.lua`
 - [x] Create config module:
 	- `speed = 800` — pixels/second
 	- `size = 6` — collision hitbox side length (small square)
@@ -91,7 +91,7 @@ Uses the Viewport from Sub-Plan A to convert mouse screen position to world coor
 	- `fire_rate = 0.15` — minimum seconds between shots
 	- `fire_gamepad_button = "rightshoulder"` — R1/RB
 
-#### 2. `classes/projectile/init.lua` — Projectile class
+#### 2. `classes/datamodel/projectile/init.lua` — Projectile class
 - [x] Extends `GameObject`
 - [x] Constructor `Projectile:new(x, y, dirX, dirY, config)`
 	- Stores normalized direction, speed, size, halfSize
@@ -100,7 +100,7 @@ Uses the Viewport from Sub-Plan A to convert mouse screen position to world coor
 - [x] `Projectile:getMovementDelta(dt)` — returns dx, dy
 - [x] `Projectile:destroy()` — sets `alive = false`
 
-#### 3. `classes/projectile/manager.lua` — ProjectileManager class
+#### 3. `classes/datamodel/projectile/manager.lua` — ProjectileManager class
 - [x] Extends `Object` (not a positioned entity)
 - [x] Constructor `ProjectileManager:new(bumpWorld)`
 	- Stores bumpWorld reference, empty projectile list, fire cooldown timer
@@ -124,16 +124,16 @@ Uses the Viewport from Sub-Plan A to convert mouse screen position to world coor
 
 ### Modified Files
 
-#### 5. `classes/player/input.lua`
+#### 5. `classes/datamodel/player/input.lua`
 - [x] Add `input.isFirePressed(config, playerIndex)`
 	- Checks `love.mouse.isDown(1)` (left mouse button)
 	- Checks gamepad `rightshoulder` if connected
 	- Returns boolean
 
-#### 6. `classes/player/config.lua`
+#### 6. `classes/datamodel/player/config.lua`
 - [x] Add `fire_gamepad_button = "rightshoulder"`
 
-#### 7. `classes/game/init.lua`
+#### 7. `classes/datamodel/game/init.lua`
 - [x] Create `ProjectileManager` in `Game:new()` with `self.map.bumpWorld`
 - [x] Call `self.projectileManager:update(dt, self.player)` after weapon update
 

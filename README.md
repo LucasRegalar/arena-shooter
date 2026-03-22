@@ -25,31 +25,33 @@ Love Love Love is a top-down arena shooter built with [Love2D](https://love2d.or
 ├── main.lua                  # Entry point (love.load, love.update, love.draw)
 ├── conf.lua                  # Love2D window configuration
 ├── classes/
-│   ├── gameObject.lua        # Base class for world entities
-│   ├── viewport.lua          # Stretch-to-fit camera with centering
-│   ├── game/
-│   │   ├── init.lua          # Game orchestrator (owns all entities, runs update loop)
-│   │   └── config.lua        # Debug flag
-│   ├── map/
-│   │   ├── init.lua          # Map model (Tiled via STI, Bump collision world)
-│   │   └── config.lua        # Tile size, scale, grid dimensions
-│   ├── player/
-│   │   ├── init.lua          # Player model (position, aim, facing)
-│   │   ├── config.lua        # Speed, deadzone, crosshair distance
-│   │   └── input.lua         # Input queries (keyboard, gamepad, mouse)
-│   ├── weapon/
-│   │   └── init.lua          # Weapon model (angle, position relative to player)
-│   ├── projectile/
-│   │   ├── init.lua          # Projectile model (position, direction, distance)
-│   │   ├── config.lua        # Speed, size, max range
-│   │   └── manager.lua       # Lifecycle: spawn → move → collide → destroy
+│   ├── datamodel/            # Game logic and data (no rendering)
+│   │   ├── game/
+│   │   │   ├── init.lua      # Game orchestrator (owns all entities, runs update loop)
+│   │   │   ├── config.lua    # Debug flag
+│   │   │   └── gameObject.lua # Base class for world entities
+│   │   ├── map/
+│   │   │   ├── init.lua      # Map model (Tiled via STI, Bump collision world)
+│   │   │   └── config.lua    # Tile size, scale, grid dimensions
+│   │   ├── player/
+│   │   │   ├── init.lua      # Player model (position, aim, facing)
+│   │   │   ├── config.lua    # Speed, deadzone, crosshair distance
+│   │   │   ├── input.lua     # Input queries (keyboard, gamepad, mouse)
+│   │   │   └── animation.lua # Animation configuration
+│   │   ├── weapon/
+│   │   │   └── init.lua      # Weapon model (angle, position relative to player)
+│   │   └── projectile/
+│   │       ├── init.lua      # Projectile model (position, direction, distance)
+│   │       ├── config.lua    # Speed, size, max range
+│   │       └── manager.lua   # Lifecycle: spawn → move → collide → destroy
 │   └── ui/                   # Renderers (presentation only, no game logic)
 │       ├── gameRenderer.lua
 │       ├── mapRenderer.lua
 │       ├── playerRenderer.lua
 │       ├── weaponRenderer.lua
 │       ├── projectileRenderer.lua
-│       └── debugOverlay.lua
+│       ├── debugOverlay.lua
+│       └── viewport.lua      # Stretch-to-fit camera with centering
 ├── assets/
 │   ├── maps/                 # Tiled map exports + source files
 │   ├── images/               # Icons, backgrounds
@@ -64,8 +66,8 @@ Love Love Love is a top-down arena shooter built with [Love2D](https://love2d.or
 
 The codebase splits cleanly into **model** and **view** layers:
 
-- **Model** (`classes/`): Pure game logic. `Game` orchestrates updates across `Map`, `Player`, `Weapon`, and `ProjectileManager`. No rendering code lives here.
-- **View** (`classes/ui/`): Renderers read model state and draw. `GameRenderer` delegates to sub-renderers for map, player, weapon, and projectiles.
+- **Model** (`classes/datamodel/`): Pure game logic. `Game` orchestrates updates across `Map`, `Player`, `Weapon`, and `ProjectileManager`. No rendering code lives here.
+- **View** (`classes/ui/`): Renderers read model state and draw. `GameRenderer` delegates to sub-renderers for map, player, weapon, and projectiles. The `Viewport` also lives here as it handles screen-to-world coordinate conversion.
 
 ### Game Loop
 

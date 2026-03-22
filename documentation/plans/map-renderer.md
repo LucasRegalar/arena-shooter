@@ -35,15 +35,15 @@ main.lua
 	- `getMapOffset()`: returns the offset values
 	- `draw()`: calls `self.mapRenderer:draw()`, then delegates to player/weapon draw (temporarily still calling `game.player:draw()`, `game.player:drawAim()`, `game.weapon:draw()` until those get their own renderers)
 	- `drawUI()`: calls `game.debugOverlay:draw(game.player)` (temporary, until UI rendering is also separated)
-- [ ] Strip rendering from `Map` (`classes/map/init.lua`)
+- [ ] Strip rendering from `Map` (`classes/datamodel/map/init.lua`)
 	- Remove texture loading, quad creation, offset fields
 	- Remove `Map:draw()` and `Map:getOffset()`
 	- Stop passing `self.wallSprite` to `Wall()` constructor
 	- Add `Map:getPixelWidth()` and `Map:getPixelHeight()`
-- [ ] Strip rendering from `Wall` (`classes/map/elements/wall.lua`)
+- [ ] Strip rendering from `Wall` (`classes/datamodel/map/elements/wall.lua`)
 	- Remove `sprite` parameter, `self.sprite` field, and `Wall:draw()`
-- [ ] Strip `draw()` no-op from `MapElement` (`classes/map/elements/mapElement.lua`)
-- [ ] Update `Game` (`classes/game/init.lua`)
+- [ ] Strip `draw()` no-op from `MapElement` (`classes/datamodel/map/elements/mapElement.lua`)
+- [ ] Update `Game` (`classes/datamodel/game/init.lua`)
 	- Remove `Game:draw()`, `Game:drawUI()`, and `Game:getMapOffset()`
 	- Keep `Game:new()` and `Game:update(dt)` — model only
 - [ ] Update `main.lua`
@@ -59,10 +59,10 @@ main.lua
 |------|--------|
 | `classes/ui/mapRenderer.lua` | **Create** — MapRenderer class |
 | `classes/ui/gameRenderer.lua` | **Create** — GameRenderer orchestrator |
-| `classes/map/init.lua` | **Edit** — strip all rendering, add pixel dimension helpers |
-| `classes/map/elements/wall.lua` | **Edit** — remove sprite and draw |
-| `classes/map/elements/mapElement.lua` | **Edit** — remove draw no-op |
-| `classes/game/init.lua` | **Edit** — remove draw/drawUI/getMapOffset |
+| `classes/datamodel/map/init.lua` | **Edit** — strip all rendering, add pixel dimension helpers |
+| `classes/datamodel/map/elements/wall.lua` | **Edit** — remove sprite and draw |
+| `classes/datamodel/map/elements/mapElement.lua` | **Edit** — remove draw no-op |
+| `classes/datamodel/game/init.lua` | **Edit** — remove draw/drawUI/getMapOffset |
 | `main.lua` | **Edit** — wire up GameRenderer |
 | `documentation/changelog.md` | **Edit** — log changes |
 | `documentation/project-structure.md` | **Edit** — describe renderer pattern |

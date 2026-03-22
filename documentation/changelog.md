@@ -3,6 +3,9 @@
 ## 2026-03-22
 
 - Removed unused legacy map element classes (`MapElement`, `Floor`, `Wall`, `Water`) from `classes/map/elements/`
+- Completed sprite consolidation: updated `PlayerRenderer` and `WeaponRenderer` to reference `assets/sprites/`, removed old `sprites/` directory
+- Reorganized `classes/` into `classes/datamodel/` (game logic) and `classes/ui/` (presentation), moved `Viewport` to `classes/ui/` and `GameObject` to `classes/datamodel/game/`
+- Updated all `require` paths across the codebase to match new directory structure
 
 ## 2026-03-21
 

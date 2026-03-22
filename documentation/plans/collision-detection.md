@@ -12,7 +12,7 @@ The player can currently walk through walls and water because `handleMovement` a
 
 ## Architecture
 
-**Collision module** (`classes/collision.lua`) — stateless utility with pure functions. Takes a map + entity geometry, returns resolved positions. Reusable for any entity type.
+**Collision module** (`classes/datamodel/collision.lua`) — stateless utility with pure functions. Takes a map + entity geometry, returns resolved positions. Reusable for any entity type.
 
 **Game orchestrates** — Game calls collision resolution between player movement intent and the map. Player never receives or knows about the map.
 
@@ -56,8 +56,8 @@ The axis-separated approach also handles corners naturally. When both axes are b
 
 ## Implementation Steps
 
-### 1. Create collision utility module (`classes/collision.lua`)
-- [ ] Create `classes/collision.lua` with two functions:
+### 1. Create collision utility module (`classes/datamodel/collision.lua`)
+- [ ] Create `classes/datamodel/collision.lua` with two functions:
   - `canOccupy(map, centerX, centerY, halfW, halfH)` — compute which grid cells the bounding box overlaps, return `true` only if all overlapped cells are passable
     - Grid cell calculation: `math.floor(pixelEdge / tile_size) + 1` for each edge of the bbox
     - Iterate all cells from top-left to bottom-right corner of the bbox
@@ -66,15 +66,15 @@ The axis-separated approach also handles corners naturally. When both axes are b
     - Try Y: if `canOccupy(map, resolvedX, oldY + dy, halfW, halfH)` then apply dy, else keep oldY
     - Return (resolvedX, resolvedY)
 
-### 2. Add hitbox fields to Player (`classes/player/init.lua`, `classes/player/config.lua`)
+### 2. Add hitbox fields to Player (`classes/datamodel/player/init.lua`, `classes/datamodel/player/config.lua`)
 - [ ] Add `hitbox_half_width = 14` and `hitbox_half_height = 14` to player config (slightly smaller than full 16px half-tile for forgiving corner navigation)
 - [ ] In `Player:new`, set `self.hitboxHalfW` and `self.hitboxHalfH` from config
 
-### 3. Refactor Player movement intent (`classes/player/init.lua`)
+### 3. Refactor Player movement intent (`classes/datamodel/player/init.lua`)
 - [ ] Rename `handleMovement(dt)` → `getMovementDelta(dt)` — computes and returns `(dx, dy)` without modifying `self.x`/`self.y`
 - [ ] Remove movement from `Player:update(dt)` — it now only calls `updateAim()` and `updateAnimation(dt)`
 
-### 4. Wire collision in Game:update (`classes/game/init.lua`)
+### 4. Wire collision in Game:update (`classes/datamodel/game/init.lua`)
 - [ ] `require` the collision module
 - [ ] In `Game:update(dt)`:
   - Call `player:getMovementDelta(dt)` to get `(dx, dy)`
@@ -94,10 +94,10 @@ The axis-separated approach also handles corners naturally. When both axes are b
 
 | File | Change |
 |---|---|
-| `classes/collision.lua` | **New** — stateless collision utility module |
-| `classes/player/config.lua` | Add hitbox half-width/half-height |
-| `classes/player/init.lua` | Add hitbox fields, rename handleMovement → getMovementDelta (returns dx/dy), remove movement from update |
-| `classes/game/init.lua` | Require collision module, orchestrate movement resolution before player:update |
+| `classes/datamodel/collision.lua` | **New** — stateless collision utility module |
+| `classes/datamodel/player/config.lua` | Add hitbox half-width/half-height |
+| `classes/datamodel/player/init.lua` | Add hitbox fields, rename handleMovement → getMovementDelta (returns dx/dy), remove movement from update |
+| `classes/datamodel/game/init.lua` | Require collision module, orchestrate movement resolution before player:update |
 | `documentation/changelog.md` | Log the change |
 | `documentation/project-structure.md` | Document collision system and updated architecture |
 

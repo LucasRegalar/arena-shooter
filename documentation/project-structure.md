@@ -14,25 +14,25 @@ A top-down 2D arena shooter built with LÖVE 2D. The player moves around a tile-
 
 ### Map
 
-The `Map` class (`classes/map/init.lua`) loads a Tiled-exported Lua map via STI with the Bump plugin and owns both the STI map instance (`self.tiledMap`) and the Bump collision world (`self.bumpWorld`).
+The `Map` class (`classes/datamodel/map/init.lua`) loads a Tiled-exported Lua map via STI with the Bump plugin and owns both the STI map instance (`self.tiledMap`) and the Bump collision world (`self.bumpWorld`).
 
 Collision geometry is generated automatically by STI's bump plugin from tiles/layers marked `collidable = true` in Tiled. Because STI creates collision rects in native pixel space (16px) while game entities work in scaled coordinates (32px), the Map scales all collision rects by the render scale factor after initialization.
 
 A passability grid (`self.passability`) is also maintained as a 2D boolean table for grid-based queries via `isPassable(x, y)`.
 
-Map configuration constants (native tile size, render scale, grid dimensions) live in `classes/map/config.lua`. The map uses 16x16 pixel tiles rendered at 2x scale (appearing as 32x32 on screen).
+Map configuration constants (native tile size, render scale, grid dimensions) live in `classes/datamodel/map/config.lua`. The map uses 16x16 pixel tiles rendered at 2x scale (appearing as 32x32 on screen).
 
 ### Player
 
-The player has a position (x, y) in map-space pixel coordinates, a movement speed, a scale value, an aim target in world space, and a left-facing flag derived from aim input. Input is handled separately in `classes/player/input.lua`, configuration in `classes/player/config.lua`, and all sprite animation / drawing now lives in `classes/ui/playerRenderer.lua`.
+The player has a position (x, y) in map-space pixel coordinates, a movement speed, a scale value, an aim target in world space, and a left-facing flag derived from aim input. Input is handled separately in `classes/datamodel/player/input.lua`, configuration in `classes/datamodel/player/config.lua`, and all sprite animation / drawing now lives in `classes/ui/playerRenderer.lua`.
 
 ### Weapon
 
-The weapon is a world-space entity that stores position, scale, an aim angle derived from the vector between the player's hand position and crosshair, and a left-facing flag used to keep the sprite visually upright when aiming behind the player. Its module entrypoint lives at `classes/weapon/init.lua`, while the sprite sheet, quad setup, and draw call live in `classes/ui/weaponRenderer.lua` so rendering stays outside the model layer.
+The weapon is a world-space entity that stores position, scale, an aim angle derived from the vector between the player's hand position and crosshair, and a left-facing flag used to keep the sprite visually upright when aiming behind the player. Its module entrypoint lives at `classes/datamodel/weapon/init.lua`, while the sprite sheet, quad setup, and draw call live in `classes/ui/weaponRenderer.lua` so rendering stays outside the model layer.
 
 ### Game
 
-The `Game` class (`classes/game/init.lua`) is the central model coordinator. It owns the Map, Player, Weapon, and DebugOverlay instances and is responsible for initializing and updating them. It has no rendering logic — all drawing is handled by the renderer layer.
+The `Game` class (`classes/datamodel/game/init.lua`) is the central model coordinator. It owns the Map, Player, Weapon, and DebugOverlay instances and is responsible for initializing and updating them. It has no rendering logic — all drawing is handled by the renderer layer.
 
 ### Renderers
 
@@ -70,7 +70,7 @@ All game objects share a single `love.graphics.translate()` applied in `love.dra
 The Bump library provides AABB collision detection with a spatial hash grid. STI's bump plugin automatically generates collision rectangles from tiles marked `collidable = true` in Tiled. The collision rects are scaled from native pixel space (16px tiles) to game coordinate space (32px tiles) at initialization. The Bump world is created and exposed by the Map model (`map.bumpWorld`). Wiring player movement through `bumpWorld:move()` is pending a separate refactor.
 
 ### Renderer separation
-Model classes (`Game`, `Map`, `Player`, `Weapon`) contain gameplay data and logic — they have zero `love.graphics` calls. The `Map` model owns the STI map instance because STI is fundamentally map data that also knows how to render itself. All drawing is handled by renderer classes in `classes/ui/`, with `MapRenderer` calling through to STI's draw method. `PlayerRenderer` and `WeaponRenderer` follow the same pattern for entity visuals so sprite assets, quads, and animation timers stay in the presentation layer. In this setup, the player model computes its facing state from aim input, the weapon model computes its aim angle and left-facing state from gameplay state, and the renderer layer consumes that data to flip sprites and switch draw order where needed.
+Model classes in `classes/datamodel/` (`Game`, `Map`, `Player`, `Weapon`) contain gameplay data and logic — they have zero `love.graphics` calls. The `Map` model owns the STI map instance because STI is fundamentally map data that also knows how to render itself. All drawing is handled by renderer classes in `classes/ui/`, with `MapRenderer` calling through to STI's draw method. `PlayerRenderer` and `WeaponRenderer` follow the same pattern for entity visuals so sprite assets, quads, and animation timers stay in the presentation layer. In this setup, the player model computes its facing state from aim input, the weapon model computes its aim angle and left-facing state from gameplay state, and the renderer layer consumes that data to flip sprites and switch draw order where needed.
 
 ### Render scale
-The Tiled map uses 16x16 pixel tiles, but we render at 2x scale so each tile appears as 32x32 on screen. This keeps the visual size consistent with player and weapon sprites. The scale factor is configured in `classes/map/config.lua` and applied by `MapRenderer` when calling STI's draw method.
+The Tiled map uses 16x16 pixel tiles, but we render at 2x scale so each tile appears as 32x32 on screen. This keeps the visual size consistent with player and weapon sprites. The scale factor is configured in `classes/datamodel/map/config.lua` and applied by `MapRenderer` when calling STI's draw method.
