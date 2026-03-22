@@ -13,7 +13,7 @@ local function playerCollisionFilter(item, other)
 end
 
 function Game:new()
-	self.map = Map("maps/map.lua")
+	self.map = Map("assets/maps/map.lua")
 	self.viewport = Viewport(self.map:getPixelWidth(), self.map:getPixelHeight())
 	self.player = Player(300, 300, 1)
 	self.weapon = Weapon(self.player)

@@ -92,7 +92,7 @@ function ProjectileManager:spawnProjectile(player)
 		projectile.size,
 		projectile.size
 	)
-	
+
 	table.insert(self.projectiles, projectile)
 end
 

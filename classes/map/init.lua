@@ -18,7 +18,7 @@ local Map = Object:extend()
 --- Creates a new Map instance.
 -- Loads a Tiled map via STI, builds a passability grid by scanning the "walls" layer,
 -- and creates a Bump collision world with scaled collision rects for each impassable tile.
---- @param mapPath string File path to a Tiled-exported Lua map (e.g. "maps/map.lua")
+--- @param mapPath string File path to a Tiled-exported Lua map (e.g. "assets/maps/map.lua")
 function Map:new(mapPath)
 	self.tiledMap = sti(mapPath)
 	self.cols = self.tiledMap.width
