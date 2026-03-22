@@ -5,7 +5,7 @@
 
 local sti = require("lib.sti")
 local bump = require("lib.bump")
-local config = require("classes.map.config")
+local config = require("classes.datamodel.map.config")
 
 --- @class Map
 --- @field tiledMap table STI map instance (handles tileset loading and rendering)

@@ -1,7 +1,7 @@
-local GameObject = require('classes.gameObject')
+local GameObject = require('classes.datamodel.game.gameObject')
 
-local playerConfig = require('classes.player.config')
-local playerInput = require('classes.player.input')
+local playerConfig = require('classes.datamodel.player.config')
+local playerInput = require('classes.datamodel.player.input')
 
 local Player = GameObject:extend()
 

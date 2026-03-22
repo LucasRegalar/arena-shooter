@@ -4,7 +4,7 @@
 -- Movement and collision are resolved externally by the ProjectileManager,
 -- following the same pattern as Player (which doesn't call bumpWorld:move itself).
 
-local GameObject = require("classes.gameObject")
+local GameObject = require("classes.datamodel.game.gameObject")
 
 --- @class Projectile : GameObject
 --- @field dirX number Normalized X component of the travel direction

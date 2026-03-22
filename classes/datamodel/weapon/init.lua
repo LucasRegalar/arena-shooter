@@ -1,4 +1,4 @@
-local GameObject = require('classes.gameObject')
+local GameObject = require('classes.datamodel.game.gameObject')
 
 local Weapon = GameObject:extend()
 

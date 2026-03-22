@@ -1,8 +1,8 @@
-local Player = require("classes.player.init")
-local Weapon = require("classes.weapon.init")
-local Map = require("classes.map.init")
-local Viewport = require("classes.viewport")
-local ProjectileManager = require("classes.projectile.manager")
+local Player = require("classes.datamodel.player.init")
+local Weapon = require("classes.datamodel.weapon.init")
+local Map = require("classes.datamodel.map.init")
+local Viewport = require("classes.ui.viewport")
+local ProjectileManager = require("classes.datamodel.projectile.manager")
 local DebugOverlay = require("classes.ui.debugOverlay")
 
 local Game = Object:extend()

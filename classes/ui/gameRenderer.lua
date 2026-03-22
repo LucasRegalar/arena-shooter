@@ -4,7 +4,7 @@
 -- Receives the Game model as a read-only data source.
 
 local MapRenderer = require("classes.ui.mapRenderer")
-local playerConfig = require("classes.player.config")
+local playerConfig = require("classes.datamodel.player.config")
 local PlayerRenderer = require("classes.ui.playerRenderer")
 local WeaponRenderer = require("classes.ui.weaponRenderer")
 local ProjectileRenderer = require("classes.ui.projectileRenderer")

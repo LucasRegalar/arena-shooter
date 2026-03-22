@@ -1,6 +1,6 @@
 Object = require "lib.classic"
 
-local Game = require("classes.game.init")
+local Game = require("classes.datamodel.game.init")
 local GameRenderer = require("classes.ui.gameRenderer")
 local game
 local gameRenderer

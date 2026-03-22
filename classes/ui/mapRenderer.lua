@@ -3,7 +3,7 @@
 -- Draws a background fill color for the floor area, then delegates tile
 -- rendering to the STI map instance owned by the Map model.
 
-local mapConfig = require("classes.map.config")
+local mapConfig = require("classes.datamodel.map.config")
 
 --- @class MapRenderer : Object
 --- @field map Map Read-only reference to the map data

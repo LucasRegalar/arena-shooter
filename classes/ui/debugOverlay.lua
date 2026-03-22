@@ -3,7 +3,7 @@
 -- corner of the screen. Only visible when `gameConfig.debug` is true.
 -- Drawn in screen space (outside the map translate) so it stays fixed on screen.
 
-local gameConfig = require("classes.game.config")
+local gameConfig = require("classes.datamodel.game.config")
 
 --- @class DebugOverlay : Object
 --- @field padding number Inner padding in pixels

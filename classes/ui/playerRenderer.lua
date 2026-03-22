@@ -1,7 +1,7 @@
 local PlayerRenderer = Object:extend()
 local anim8 = require('lib.anim8')
 
-local gameConfig = require('classes.game.config')
+local gameConfig = require('classes.datamodel.game.config')
 
 
 function PlayerRenderer:new(player, playerConfig)

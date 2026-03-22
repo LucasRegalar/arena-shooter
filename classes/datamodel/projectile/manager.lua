@@ -3,10 +3,10 @@
 -- range tracking, and cleanup. Decoupled from Player and Weapon — receives
 -- player state as parameters rather than storing a permanent reference.
 
-local Projectile = require("classes.projectile.init")
-local projectileConfig = require("classes.projectile.config")
-local playerConfig = require("classes.player.config")
-local input = require("classes.player.input")
+local Projectile = require("classes.datamodel.projectile.init")
+local projectileConfig = require("classes.datamodel.projectile.config")
+local playerConfig = require("classes.datamodel.player.config")
+local input = require("classes.datamodel.player.input")
 
 --- @class ProjectileManager : Object
 --- @field bumpWorld table Shared Bump collision world
