@@ -28,7 +28,7 @@ function Player:new(x, y, playerIndex, gameConfig)
 	self.originX = playerConfig.sprite_size / 2 -- center of sprite
 	self.originY = playerConfig.sprite_size / 2 -- center of sprite
 
-	self.spriteSheet = love.graphics.newImage('sprites/NuclearLeak_CharacterAnim_1.2/character_20x20_pink.png')
+	self.spriteSheet = love.graphics.newImage('sprites/character/character_20x20_pink.png')
 
 	local spriteSheetWidth, spriteSheetHeight = self.spriteSheet:getDimensions()
 
