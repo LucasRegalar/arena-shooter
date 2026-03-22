@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-03-22
+
+- Removed unused legacy map element classes (`MapElement`, `Floor`, `Wall`, `Water`) from `classes/map/elements/`
+
 ## 2026-03-21
 
 - Weapon now stores an aim angle derived from the player crosshair and hand position

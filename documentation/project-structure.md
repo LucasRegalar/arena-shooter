@@ -22,10 +22,6 @@ A passability grid (`self.passability`) is also maintained as a 2D boolean table
 
 Map configuration constants (native tile size, render scale, grid dimensions) live in `classes/map/config.lua`. The map uses 16x16 pixel tiles rendered at 2x scale (appearing as 32x32 on screen).
 
-### Map Elements (Legacy)
-
-The `classes/map/elements/` directory contains Floor, Wall, and Water classes that were used by the old grid-based map system. These are no longer instantiated — passability is now derived directly from STI tile GIDs. The files remain in the codebase but are unused.
-
 ### Player
 
 The player has a position (x, y) in map-space pixel coordinates, a movement speed, a scale value, an aim target in world space, and a left-facing flag derived from aim input. Input is handled separately in `classes/player/input.lua`, configuration in `classes/player/config.lua`, and all sprite animation / drawing now lives in `classes/ui/playerRenderer.lua`.
@@ -47,7 +43,7 @@ The renderer layer lives in `classes/ui/` and handles all drawing, separate from
 - **PlayerRenderer** (`classes/ui/playerRenderer.lua`) — owns the player sprite sheet, animation timer, sprite quads, crosshair rendering, and temporary player debug visuals while reading the `Player` model for world state, including whether the sprite should face left.
 - **WeaponRenderer** (`classes/ui/weaponRenderer.lua`) — owns the weapon sprite sheet and quad data, and reproduces the previous weapon draw call while reading position and scale from the `Weapon` model.
 
-This pattern separates concerns cleanly: model classes (`Game`, `Map`, `MapElement`) have zero `love.graphics` calls, and renderers read model data to produce visuals. When new entities need rendering (player, weapon), they follow the same pattern — a renderer in `classes/ui/` that reads the model.
+This pattern separates concerns cleanly: model classes (`Game`, `Map`, `Player`, `Weapon`) have zero `love.graphics` calls, and renderers read model data to produce visuals. When new entities need rendering, they follow the same pattern — a renderer in `classes/ui/` that reads the model.
 
 ### DebugOverlay
 
