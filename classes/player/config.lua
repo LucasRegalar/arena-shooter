@@ -4,13 +4,14 @@ local playerConfig = {
 	-- skip the last to frames since idle has only 4 / 6
 	idle_frame_trim = 2,
 	sprite_offset_y = 1,
+	sprite_scale = 3,
 	move_speed = 300,
 	gamepad_deadzone = 0.2,
 	crosshair_max_distance = 60,
 	crosshair_radius = 6,
 	crosshair_line = 10,
 	hand_distance = 10,
-	fire_gamepad_button = "rightshoulder"
+	sprite_sheet = love.graphics.newImage('sprites/character/character_20x20_pink.png')
 }
 
 return playerConfig
