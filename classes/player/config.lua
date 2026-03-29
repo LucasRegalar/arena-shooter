@@ -14,6 +14,9 @@ local playerConfig = {
 	sprite_sheet = love.graphics.newImage('sprites/character/character_20x20_pink.png')
 }
 
+playerConfig.sprite_sheet:setFilter("nearest", "nearest", 1)
+playerConfig.sprite_sheet:setWrap("clampzero", "clampzero")
+
 return playerConfig
 
 

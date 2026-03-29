@@ -2,6 +2,7 @@ local Player = require("classes.player.init")
 local Weapon = require("classes.weapon.init")
 
 function love.load()
+	love.graphics.setDefaultFilter("nearest", "nearest")
 	Player = Player:new(300, 300, 1)
 	Weapon = Weapon:new(Player)
 end
