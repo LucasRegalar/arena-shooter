@@ -4,6 +4,7 @@ local playerConfig = require('classes.player.config')
 local gameConfig = require('config')
 
 -- todo: continue the refactor of the render / animation process
+-- todo: fix blur when drawing sprite
 local function getRenderData(
 	playerX,
 	playerY,
@@ -18,13 +19,11 @@ local function getRenderData(
 
 	local scale = playerConfig.sprite_scale
 	-- bounds = sprite rectangle ater scaling
-	local boundsX = playerX - spriteCenterX * scale
+	local boundsX = spriteCenterX
 	-- boundsX/boundsY = “where is the sprite’s real top-left after scaling and origin are applied?”
-	local boundsY = playerY - spriteCenterY * scale
-	local boundsSize = spriteSize * scale
-	local boundsCenterX = boundsX + boundsSize / 2
-	local boundsCenterY = boundsY + boundsSize / 2
-	local visualOffsetY = playerConfig.sprite_offset_y * scale
+	local boundsY = spriteCenterY
+	local boundsSize = spriteSize
+	local visualOffsetY = playerConfig.sprite_offset_y
 	local sprite_sheet = playerConfig.sprite_sheet
 
 	return {
@@ -40,10 +39,9 @@ local function getRenderData(
 		boundsX = boundsX,
 		boundsY = boundsY,
 		boundsSize = boundsSize,
-		boundsCenterX = boundsCenterX,
-		boundsCenterY = boundsCenterY,
 		visualOffsetY = visualOffsetY,
 		sprite_sheet = sprite_sheet,
+		spriteSize = spriteSize
 	}
 end
 
@@ -52,38 +50,49 @@ local function drawPlayer(
 )
 	local scaleX = renderData.isFacingLeft and - renderData.scale or renderData.scale
 
+	love.graphics.push()
+	love.graphics.translate(renderData.playerX, renderData.playerY)
+	love.graphics.scale(scaleX, renderData.scale)
+
 	renderData.animation:draw(
 		renderData.sprite_sheet,
-		renderData.playerX,
-		renderData.playerY - renderData.visualOffsetY,
 		0,
-		scaleX,
-		renderData.scale,
+		0 - renderData.visualOffsetY,
+		0,
+		1,
+		1,
 		renderData.spriteCenterX,
 		renderData.spriteCenterY
 	)
+
+	love.graphics.pop()
 end
 
 local function drawAim(renderData)
-	love.graphics.circle("line", renderData.crossHairX, renderData.crossHairY, playerConfig.crosshair_radius)
-	love.graphics.line(renderData.crossHairX - playerConfig.crosshair_line, renderData.crossHairY, renderData.crossHairX + playerConfig.crosshair_line, renderData.crossHairY)
-	love.graphics.line(renderData.crossHairX, renderData.crossHairY - playerConfig.crosshair_line, renderData.crossHairX, renderData.crossHairY + playerConfig.crosshair_line)
+	love.graphics.push()
+	love.graphics.translate(renderData.crossHairX, renderData.crossHairY)
+
+	love.graphics.circle("line", 0, 0, playerConfig.crosshair_radius)
+	love.graphics.line(- playerConfig.crosshair_line, 0, playerConfig.crosshair_line, 0)
+	love.graphics.line(0, - playerConfig.crosshair_line, 0, playerConfig.crosshair_line)
+
+	love.graphics.pop()
 end
 
 local function drawDebug(renderData)
-	love.graphics.setColor(0, 1, 0) -- rgp green
-	love.graphics.rectangle("line", renderData.boundsX, renderData.boundsY, renderData.boundsSize, renderData.boundsSize)
+	local scaleX = renderData.isFacingLeft and - renderData.scale or renderData.scale
 
-	love.graphics.setColor(1, 0, 0) -- rgp red
-	love.graphics.circle("fill", renderData.playerX, renderData.playerY, 3)
+	love.graphics.push()
+	love.graphics.translate(renderData.playerX, renderData.playerY)
+	love.graphics.scale(scaleX, renderData.scale)
 
-	love.graphics.setColor(0, 0.8, 1) -- cyan
-	love.graphics.circle("fill", renderData.boundsCenterX, renderData.boundsCenterY, 3)
+	-- rectangle displaying the acutal sprite width
+	love.graphics.rectangle("line", - renderData.spriteSize / 2, - renderData.spriteSize / 2, renderData.spriteSize, renderData.spriteSize)
 
-	love.graphics.setColor(1, 1, 0) -- yellow
-	love.graphics.circle("fill", renderData.boundsX, renderData.boundsY, 2)
+	-- player position
+	love.graphics.circle("fill", 0, 0, 1)
 
-	love.graphics.setColor(1, 1, 1) -- white
+	love.graphics.pop()
 end
 
 function render.draw(

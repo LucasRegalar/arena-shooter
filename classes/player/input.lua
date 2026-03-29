@@ -12,16 +12,16 @@ function input.getMovementVector(config, playerIndex)
 
 	local moveX, moveY = 0, 0
 
-	if love.keyboard.isDown("e") then
+	if love.keyboard.isDown("r") then
 		moveX = moveX + 1
 	end
-	if love.keyboard.isDown("2") then
+	if love.keyboard.isDown("3") then
 		moveY = moveY - 1
 	end
-	if love.keyboard.isDown("w") then
+	if love.keyboard.isDown("e") then
 		moveY = moveY + 1
 	end
-	if love.keyboard.isDown("q") then
+	if love.keyboard.isDown("w") then
 		moveX = moveX - 1
 	end
 
