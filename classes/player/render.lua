@@ -4,7 +4,6 @@ local playerConfig = require('classes.player.config')
 local gameConfig = require('config')
 
 -- todo: continue the refactor of the render / animation process
--- todo: fix blur when drawing sprite
 local function getRenderData(
 	playerX,
 	playerY,
@@ -18,11 +17,6 @@ local function getRenderData(
 	local spriteCenterY = spriteSize / 2
 
 	local scale = playerConfig.sprite_scale
-	-- bounds = sprite rectangle ater scaling
-	local boundsX = spriteCenterX
-	-- boundsX/boundsY = “where is the sprite’s real top-left after scaling and origin are applied?”
-	local boundsY = spriteCenterY
-	local boundsSize = spriteSize
 	local visualOffsetY = playerConfig.sprite_offset_y
 	local sprite_sheet = playerConfig.sprite_sheet
 
@@ -36,9 +30,6 @@ local function getRenderData(
 		scale = scale,
 		spriteCenterX = spriteCenterX,
 		spriteCenterY = spriteCenterY,
-		boundsX = boundsX,
-		boundsY = boundsY,
-		boundsSize = boundsSize,
 		visualOffsetY = visualOffsetY,
 		sprite_sheet = sprite_sheet,
 		spriteSize = spriteSize
@@ -87,7 +78,7 @@ local function drawDebug(renderData)
 	love.graphics.scale(scaleX, renderData.scale)
 
 	-- rectangle displaying the acutal sprite width
-	love.graphics.rectangle("line", - renderData.spriteSize / 2, - renderData.spriteSize / 2, renderData.spriteSize, renderData.spriteSize)
+	love.graphics.rectangle("line", - renderData.spriteCenterX, - renderData.spriteCenterY, renderData.spriteSize, renderData.spriteSize)
 
 	-- player position
 	love.graphics.circle("fill", 0, 0, 1)

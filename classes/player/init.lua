@@ -1,7 +1,6 @@
 local Object = require('lib.classic')
 local anim8 = require('lib.anim8')
 
-local gameConfig = require('config')
 local playerConfig = require('classes.player.config')
 local playerInput = require('classes.player.input')
 local playerRender = require('classes.player.render')
