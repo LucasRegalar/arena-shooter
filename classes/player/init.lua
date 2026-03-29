@@ -14,7 +14,7 @@ function Player:new(x, y, playerIndex)
 	self.y = y
 	self.playerIndex = playerIndex
 	self.speed = playerConfig.move_speed
-	self.scale = 3
+	self.scale = 2
 	self.isFacingLeft = false
 
 	self.crossHairX = self.x
@@ -26,6 +26,7 @@ function Player:new(x, y, playerIndex)
 	self.handX = self.x - playerConfig.hand_distance
 	self.handY = self.y - playerConfig.hand_distance
 
+	-- keep animation here, because we still need it for the update function
 	local spriteSheetWidth, spriteSheetHeight = playerConfig.sprite_sheet:getDimensions()
 
 	local grid = anim8.newGrid(
