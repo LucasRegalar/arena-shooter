@@ -15,13 +15,13 @@ function input.getMovementVector(config, playerIndex)
 	if love.keyboard.isDown("r") then
 		moveX = moveX + 1
 	end
-	if love.keyboard.isDown("3") then
+	if love.keyboard.isDown("w") then
 		moveY = moveY - 1
 	end
 	if love.keyboard.isDown("e") then
 		moveY = moveY + 1
 	end
-	if love.keyboard.isDown("w") then
+	if love.keyboard.isDown("q") then
 		moveX = moveX - 1
 	end
 
@@ -60,15 +60,15 @@ function input.getAimVector(config, playerIndex)
 
 	if not gamepad then
 
-		if love.keyboard.isDown("o") then
+		if love.keyboard.isDown("p") then
 			directionX = 1
 			distance = 1
 		end
-		if love.keyboard.isDown("8") then
+		if love.keyboard.isDown("i") then
 			directionY = -1
 			distance = 1
 		end
-		if love.keyboard.isDown("i") then
+		if love.keyboard.isDown("o") then
 			directionY = 1
 			distance = 1
 		end
