@@ -3,7 +3,6 @@ local render = {}
 local playerConfig = require('classes.player.config')
 local gameConfig = require('config')
 
--- todo: continue the refactor of the render / animation process
 local function getRenderData(
 	playerX,
 	playerY,

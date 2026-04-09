@@ -29,22 +29,27 @@ function Weapon:update()
 	self.angle = math.atan2(aimDeltaY, aimDeltaX)
 end
 
--- todo: use anim8
--- todo: extract into render file
+-- use anim8 here
 function Weapon:draw()
-	local scaleY = self.isFacingLeft and -self.scale or self.scale
+	love.graphics.push()
+	love.graphics.translate(self.x, self.y)
+	love.graphics.scale(self.scale, self.scale)
+
+	local scaleY = self.isFacingLeft and -1 or 1
 
 	love.graphics.draw(
 		self.spriteSheet,
 		self.quad,
-		self.x,
-		self.y,
+		0,
+		0,
 		self.angle,
-		self.scale,
+		1,
 		scaleY,
 		self.spriteSizeX / 2,
 		self.spriteSizeY / 2
 	)
+
+	love.graphics.pop()
 end
 
 return Weapon
