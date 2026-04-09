@@ -7,8 +7,6 @@ local playerRender = require('classes.player.render')
 
 local Player = Object:extend()
 
--- todo: refactor so player receives opts or config instead of
--- requirering the gameConfig
 function Player:new(x, y, playerIndex)
 	self.x = x
 	self.y = y
