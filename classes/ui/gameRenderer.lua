@@ -1,6 +1,6 @@
 --- Game renderer.
 -- Orchestrates all rendering for the game. Owns individual renderers and delegates
--- the world-to-screen transform to the Viewport owned by the Game model.
+-- the world-to-screen transform to push.lua (resolution-independence library).
 -- Receives the Game model as a read-only data source.
 
 local MapRenderer = require("classes.ui.mapRenderer")
@@ -19,7 +19,7 @@ local GameRenderer = Object:extend()
 
 --- Creates a new GameRenderer.
 -- Initializes all sub-renderers. The world-to-screen transform is handled by
--- the Viewport instance on the Game model.
+-- push.lua's canvas-based scaling.
 --- @param game Game The game model to render (read-only data source)
 function GameRenderer:new(game)
 	self.game = game
@@ -41,13 +41,12 @@ function GameRenderer:update(dt)
 end
 
 --- Draws the entire game frame.
--- First draws world-space entities (map, player, weapon) inside the viewport
--- transform (stretch-to-fit + centering), then draws screen-space UI elements
--- (debug overlay, HUD) outside the transform.
+-- First draws world-space entities (map, player, weapon) inside the push
+-- transform (canvas-based stretch-to-fit + centering), then draws screen-space
+-- UI elements (debug overlay, HUD) outside the transform.
 function GameRenderer:draw()
-	-- World space: apply viewport stretch-to-fit transform
-	love.graphics.push()
-	self.game.viewport:apply()
+	-- World space: push handles canvas rendering and scaling to screen
+	push:start()
 
 	self.mapRenderer:draw()
 
@@ -61,7 +60,7 @@ function GameRenderer:draw()
 
 	self.projectileRenderer:draw()
 
-	love.graphics.pop()
+	push:finish()
 
 	-- Screen space: UI elements stay fixed regardless of camera position
 	-- Temporary: delegate to debug overlay until UI rendering is separated

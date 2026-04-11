@@ -6,7 +6,7 @@ function Weapon:new(player, gameConfig)
 	Weapon.super.new(self, player.x, player.y, gameConfig)
 
 	self.player = player
-	self.scale = 1.5
+	self.scale = 0.75
 	self.angle = 0
 	self.isFacingLeft = false
 

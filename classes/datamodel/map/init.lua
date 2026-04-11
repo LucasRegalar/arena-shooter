@@ -66,8 +66,8 @@ function Map:new(mapPath)
 	-- Create Bump collision world from the passability grid.
 	-- We build this ourselves rather than using STI's bump_init because
 	-- bump_init doesn't support chunked maps (layer.data is nil for chunks).
-	-- Cell size matches the scaled tile size for optimal spatial hashing.
-	local tilePixels = config.tile_size * config.scale
+	-- Cell size matches the tile size for optimal spatial hashing.
+	local tilePixels = config.tile_size
 	self.bumpWorld = bump.newWorld(tilePixels)
 	for y = 1, self.rows do
 		for x = 1, self.cols do
@@ -85,16 +85,16 @@ function Map:update(dt)
 	self.tiledMap:update(dt)
 end
 
---- Returns the total pixel width of the map at render scale.
---- @return number Width in pixels (scaled)
+--- Returns the total pixel width of the map.
+--- @return number Width in pixels
 function Map:getPixelWidth()
-	return self.cols * config.tile_size * config.scale
+	return self.cols * config.tile_size
 end
 
---- Returns the total pixel height of the map at render scale.
---- @return number Height in pixels (scaled)
+--- Returns the total pixel height of the map.
+--- @return number Height in pixels
 function Map:getPixelHeight()
-	return self.rows * config.tile_size * config.scale
+	return self.rows * config.tile_size
 end
 
 --- Returns whether the tile at the given grid coordinates is passable.

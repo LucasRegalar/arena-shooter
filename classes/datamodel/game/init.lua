@@ -1,7 +1,6 @@
 local Player = require("classes.datamodel.player.init")
 local Weapon = require("classes.datamodel.weapon.init")
 local Map = require("classes.datamodel.map.init")
-local Viewport = require("classes.ui.viewport")
 local ProjectileManager = require("classes.datamodel.projectile.manager")
 local DebugOverlay = require("classes.ui.debugOverlay")
 
@@ -14,8 +13,7 @@ end
 
 function Game:new()
 	self.map = Map("assets/maps/map.lua")
-	self.viewport = Viewport(self.map:getPixelWidth(), self.map:getPixelHeight())
-	self.player = Player(300, 300, 1)
+	self.player = Player(150, 150, 1)
 	self.weapon = Weapon(self.player)
 	self.projectileManager = ProjectileManager(self.map.bumpWorld)
 	self.debugOverlay = DebugOverlay()
@@ -52,7 +50,7 @@ function Game:update(dt)
 	self.player.x = actualX + hw
 	self.player.y = actualY + hh
 
-	self.player:update(dt, self.viewport)
+	self.player:update(dt)
 	self.weapon:update(dt)
 	self.projectileManager:update(dt, self.player)
 end

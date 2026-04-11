@@ -6,11 +6,11 @@ local playerInput = require('classes.datamodel.player.input')
 local Player = GameObject:extend()
 
 function Player:new(x, y, playerIndex, gameConfig)
-	Player.super.new(self, x or 300, y or 300, gameConfig)
+	Player.super.new(self, x or 150, y or 150, gameConfig)
 
 	self.playerIndex = playerIndex
 	self.speed = playerConfig.move_speed
-	self.scale = 32/20
+	self.scale = 16/20
 	self.isFacingLeft = false
 
 	self.crossHairX = self.x
@@ -27,17 +27,16 @@ end
 
 
 --- Half-width of the player's collision hitbox in pixels.
--- The full hitbox is 28x28, slightly smaller than a 32px tile for forgiving navigation.
-Player.halfWidth = 14
+-- The full hitbox is 14x14, slightly smaller than a 16px tile for forgiving navigation.
+Player.halfWidth = 7
 
 --- Half-height of the player's collision hitbox in pixels.
-Player.halfHeight = 14
+Player.halfHeight = 7
 
 --- Updates player state each frame.
 --- @param dt number Delta time since the last frame
---- @param viewport Viewport The viewport for mouse aim screen-to-world conversion
-function Player:update(dt, viewport)
-	self:updateAim(viewport)
+function Player:update(dt)
+	self:updateAim()
 end
 
 --- Returns the player's desired movement delta for this frame.
@@ -53,14 +52,13 @@ end
 --- Updates the player's aim direction, hand position, and crosshair position.
 -- Reads gamepad aim first; if the gamepad has no input, falls back to mouse aim.
 -- This preserves gamepad priority for players using controllers.
---- @param viewport Viewport The viewport for mouse aim screen-to-world conversion
-function Player:updateAim(viewport)
+function Player:updateAim()
 	local aimInputX, aimInputY, aimInputDistance = playerInput.getAimVector(playerConfig, self.playerIndex)
 
 	-- Fall back to mouse aim when gamepad has no input
 	if aimInputDistance == 0 then
 		aimInputX, aimInputY, aimInputDistance = playerInput.getMouseAimVector(
-			self.x, self.y, viewport, playerConfig
+			self.x, self.y, playerConfig
 		)
 	end
 

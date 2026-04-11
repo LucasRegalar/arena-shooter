@@ -3,14 +3,14 @@
 -- Range and speed will eventually vary per weapon type.
 local projectileConfig = {
 	--- Movement speed in pixels per second.
-	speed = 800,
+	speed = 400,
 
 	--- Side length of the square collision hitbox in pixels.
-	size = 6,
+	size = 3,
 
 	--- Maximum travel distance in pixels before the projectile is destroyed.
 	-- Maps to weapon range — future weapons will override this value.
-	max_range = 600,
+	max_range = 300,
 
 	--- Minimum seconds between consecutive shots.
 	fire_rate = 0.15,

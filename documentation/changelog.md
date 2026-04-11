@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-04-11
+
+- Replaced custom `Viewport` class with push.lua library for resolution-independent rendering
+- Collapsed 3 coordinate systems (native Tiled 16px, game-world 32px, screen) into 1 (native Tiled 16px, 720x448)
+- Removed `mapConfig.scale` — game now operates in native Tiled coordinates, push.lua handles all scaling to screen
+- Halved all spatial constants (speeds, hitbox sizes, distances, sprite scales) to match new coordinate space
+- Deleted `classes/ui/viewport.lua`
+- Added push.lua library (`lib/push.lua`) for canvas-based screen scaling with letterboxing
+
 ## 2026-03-22
 
 - Removed unused legacy map element classes (`MapElement`, `Floor`, `Wall`, `Water`) from `classes/map/elements/`

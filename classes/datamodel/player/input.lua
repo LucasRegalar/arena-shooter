@@ -112,19 +112,23 @@ function input.isFirePressed(config, playerIndex)
 end
 
 --- Returns an aim vector from the mouse cursor position in world space.
--- Converts the mouse screen position to world coordinates via the viewport,
+-- Converts the mouse screen position to world coordinates via push.lua,
 -- then computes a direction vector from the player to the cursor.
 -- Returns the same (directionX, directionY, distance) signature as getAimVector
 -- so the two can be used interchangeably.
 --- @param playerX number Player center X in world coordinates
 --- @param playerY number Player center Y in world coordinates
---- @param viewport Viewport The viewport for screen-to-world conversion
 --- @return number directionX Normalized X component of the aim direction
 --- @return number directionY Normalized Y component of the aim direction
 --- @return number distance Normalized aim distance (0 to 1, relative to crosshair_max_distance)
-function input.getMouseAimVector(playerX, playerY, viewport, config)
+function input.getMouseAimVector(playerX, playerY, config)
 	local mouseScreenX, mouseScreenY = love.mouse.getPosition()
-	local mouseWorldX, mouseWorldY = viewport:screenToWorld(mouseScreenX, mouseScreenY)
+	local mouseWorldX, mouseWorldY = push:toGame(mouseScreenX, mouseScreenY)
+
+	-- push:toGame returns nil when the mouse is in the letterbox area
+	if not mouseWorldX or not mouseWorldY then
+		return 0, 0, 0
+	end
 
 	local dx = mouseWorldX - playerX
 	local dy = mouseWorldY - playerY
